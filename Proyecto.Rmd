@@ -1,0 +1,14 @@
+---
+title: "Proyecto"
+author: ""
+date: '2022-06-14'
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
+```
+
