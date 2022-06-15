@@ -12,3 +12,20 @@ library(readxl)
 datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
 ```
 
+Esta encuesta se trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011 que tenía 25566 explotaciones ganaderas. Luego se realizó un muestreo por estrato de tamaño y por un criterio geografico. El tamaño de la muestra resultó ser de 1506 casos de los cuales algunos fueron descartados(porque ya no eran ganaderos o por otros aspectos) por lo que la muestra final es de 1426.
+En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a traves de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
+
+
+
+Fijarse cuantas son personas fisicas debido a que esas seran las que vamos a centrar el analisis con las caracteristicas demograficas para intentar encontrar patrones en relacion a la incorporacion de I+D
+
+Elegir alguna variable de I+D y comparar para cada tipo de ganado vacuno, lo mismo con lo de los profesionales
+
+Separar por los que si tienen I+D y los que no, y fijarse si contrataron profesional
+
+Sumar todas las variables de innovación y usarla como una sola
+
+```{r}
+
+```
+
