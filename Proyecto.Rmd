@@ -25,6 +25,8 @@ Separar por los que si tienen I+D y los que no, y fijarse si contrataron profesi
 
 Sumar todas las variables de innovación y usarla como una sola
 
+ver razas predominantes para ovinos y bovinos para ovinos ver cantidad de lana y cantidad de cabezas vendidas ovinas
+
 ```{r}
 
 ```
