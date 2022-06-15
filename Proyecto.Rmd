@@ -28,6 +28,16 @@ Sumar todas las variables de innovación y usarla como una sola
 ver razas predominantes para ovinos y bovinos para ovinos ver cantidad de lana y cantidad de cabezas vendidas ovinas
 
 ```{r}
-
+datos %>% 
+  group_by(a9,aiv_1,a12) %>% 
+  filter(a9=="1",aiv_1=="1",a12!="0") %>% 
+  ggplot(aes(x=factor(aiv_1),fill=factor(a12)))+geom_bar(position = "dodge")+
+  labs(y="Cantidad")+
+  scale_fill_brewer(name="Nivel educativo",palette="Paired",labels = c('0' = '0',
+                                                       '3' = 'Secundaria básica',
+                                                       '4' = 'Secundaria superior',
+                                                       '5' = 'Técnica',
+                                                       '6' = 'Universitaria'))+
+  scale_x_discrete(name="I+D Interna",labels = c('1' = 'Si'))
 ```
 
