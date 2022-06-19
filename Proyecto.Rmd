@@ -29,15 +29,80 @@ ver razas predominantes para ovinos y bovinos para ovinos ver cantidad de lana y
 
 ```{r}
 datos %>% 
-  group_by(a9,aiv_1,a12) %>% 
-  filter(a9=="1",aiv_1=="1",a12!="0") %>% 
-  ggplot(aes(x=factor(aiv_1),fill=factor(a12)))+geom_bar(position = "dodge")+
+  group_by(a9) %>% 
+  ggplot(aes(x=factor(a9)))+
+  geom_bar()+
   labs(y="Cantidad")+
-  scale_fill_brewer(name="Nivel educativo",palette="Paired",labels = c('0' = '0',
+  scale_x_discrete(name="Condición jurídica",labels = c(
+                                                       '1' = 'Persona física',
+                                                       '2' = 'Sociedad sin contrato',
+                                                       '3' = 'Sociedad con contrato legal',
+                                                       '4' = 'Otra'))
+```
+
+
+```{r}
+aiv_nueva <- datos %>% 
+  mutate(aiv_1 = ifelse(aiv_1 == "2", 0, aiv_1)) %>% 
+  mutate(aiv_2 = ifelse(aiv_2 == "2", 0, aiv_2)) %>% 
+  mutate(aiv_3 = ifelse(aiv_3 == "2", 0, aiv_3)) %>% 
+  mutate(aiv_4 = ifelse(aiv_4 == "2", 0, aiv_4)) %>% 
+  mutate(aiv_5 = ifelse(aiv_5 == "2", 0, aiv_5)) %>% 
+  mutate(aiv_6 = ifelse(aiv_6 == "2", 0, aiv_6)) %>% 
+  mutate(aiv_7 = ifelse(aiv_7 == "2", 0, aiv_7)) %>% 
+  mutate(aiv_8 = ifelse(aiv_8 == "2", 0, aiv_8))
+
+aiv_nueva = rowSums(aiv_nueva[ , c("aiv_1","aiv_2","aiv_3","aiv_4","aiv_5","aiv_6","aiv_7","aiv_8")])
+
+datos<-cbind(datos,aiv_nueva)
+
+datos %>% 
+  select(aiv_nueva) %>% 
+  arrange(desc(aiv_nueva))
+
+
+```
+
+
+```{r}
+datos %>% 
+  group_by(a9,aiv_nueva,a12) %>% 
+  filter(a9=="1",a12!="0") %>% 
+  summarise(n=n()) %>%
+  mutate(freq=n/sum(n)) %>%
+  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(a12)))+
+  geom_bar(stat="identity",position = "dodge")+
+  scale_fill_brewer(name="Nivel educativo",palette="Paired",labels = c(
+                                                       '1' = 'Ninguna',
+                                                       '2' = 'Primaria',
                                                        '3' = 'Secundaria básica',
                                                        '4' = 'Secundaria superior',
                                                        '5' = 'Técnica',
-                                                       '6' = 'Universitaria'))+
-  scale_x_discrete(name="I+D Interna",labels = c('1' = 'Si'))
+                                                       '6' = 'Universitaria',
+                                                       '7' = 'Otros'))
+
+```
+
+
+```{r}
+datos %>% 
+  group_by(a9,aiv_nueva) %>% 
+  filter(a9=="1",a12!="0") %>% 
+  ggplot(aes(x=factor(aiv_nueva)))+
+  geom_bar()+
+  labs(y="Cantidad")
+```
+
+```{r}
+datos %>% 
+  group_by(a9,aiv_nueva,prof_1) %>% 
+  filter(a9=="1",prof_1!="0") %>% 
+  summarise(n=n()) %>%
+  mutate(freq=n/sum(n)) %>%
+  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(prof_1)))+
+  geom_bar(position = "dodge",stat="identity")+
+  scale_fill_brewer(name="Personal Profesional",palette="Paired",labels = c(
+                                                       '1' = 'Si',
+                                                       '2' = 'No'))
 ```
 
