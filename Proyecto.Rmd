@@ -30,7 +30,7 @@ ver razas predominantes para ovinos y bovinos para ovinos ver cantidad de lana y
 ```{r}
 datos %>% 
   group_by(a9) %>% 
-  ggplot(aes(x=factor(a9)))+
+  ggplot(aes(x=fct_infreq(factor(a9))))+
   geom_bar()+
   labs(y="Cantidad")+
   scale_x_discrete(name="Condición jurídica",labels = c(
@@ -38,6 +38,8 @@ datos %>%
                                                        '2' = 'Sociedad sin contrato',
                                                        '3' = 'Sociedad con contrato legal',
                                                        '4' = 'Otra'))
+
+?fct_re
 ```
 
 
@@ -67,19 +69,15 @@ datos %>%
 ```{r}
 datos %>% 
   group_by(a9,aiv_nueva,a12) %>% 
+  mutate(a12 = case_when(a12 <= 4 ~ "Básico",
+                           a12 <= 6 ~ "Tecnica e universitaria",
+                           a12 > 6 ~ "Otros")) %>% 
   filter(a9=="1",a12!="0") %>% 
   summarise(n=n()) %>%
   mutate(freq=n/sum(n)) %>%
-  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(a12)))+
-  geom_bar(stat="identity",position = "dodge")+
-  scale_fill_brewer(name="Nivel educativo",palette="Paired",labels = c(
-                                                       '1' = 'Ninguna',
-                                                       '2' = 'Primaria',
-                                                       '3' = 'Secundaria básica',
-                                                       '4' = 'Secundaria superior',
-                                                       '5' = 'Técnica',
-                                                       '6' = 'Universitaria',
-                                                       '7' = 'Otros'))
+  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=a12))+
+  geom_bar(stat="identity",position = "dodge",aspect.ratio = 1)+
+  facet_wrap(~a12)
 
 ```
 
@@ -105,4 +103,8 @@ datos %>%
                                                        '1' = 'Si',
                                                        '2' = 'No'))
 ```
+
+
+
+
 
