@@ -12,11 +12,26 @@ library(readxl)
 datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
 ```
 
-Esta encuesta se trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011 que tenía 25566 explotaciones ganaderas. Luego se realizó un muestreo por estrato de tamaño y por un criterio geografico. El tamaño de la muestra resultó ser de 1506 casos de los cuales algunos fueron descartados(porque ya no eran ganaderos o por otros aspectos) por lo que la muestra final es de 1426.
+
+## Intuduccion
+
+Este proyecto nace como un instrumento para poder aplicar los contenidos aprendidos durante el semestre en un problema real. Se tendrá que demostrar los conocimentos adquiridos al realizar un analisis exploratorio sobre datos de interes nacional, poniendo especial énfasis en la correcta visualización de los resultados obtenidos, realizando una correcta interpretación de la misma. 
+
+En el caso de este grupo en cuestión, se analizarán datos de una encuesta agropecuaria, que fueron elegidos para llevar a cabo estos objetivos, relacionando las caracteristicas de la persona fisica y su territorio con su productividad y tecnologia, entre otras variables. Se utilizará exclusivamente el lenguaje de programación R, y sus respectivas expansiones, como Markdown, Shiny y RStudio.
+
+
+
+## Datos
+
+La encuesta fue realizada por el Ministerio de Ganaderia, Agricultura y Pesca del Uruguay.
+
+Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011 que tenía 25566 explotaciones ganaderas, todas las variables son de tipo double ya que eran preguntas multiple opcion (en su mayoria) con una recodificacion numerica. Luego se realizó un muestreo por estrato de tamaño y por un criterio geografico. El tamaño de la muestra resultó ser de 1506 casos (cada observacion corresponde a un encuestado) de los cuales algunos fueron descartados(porque ya no eran ganaderos o por otros aspectos) por lo que la muestra final es de 1426.
+
 En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a traves de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
 
 
 
+****
 Fijarse cuantas son personas fisicas debido a que esas seran las que vamos a centrar el analisis con las caracteristicas demograficas para intentar encontrar patrones en relacion a la incorporacion de I+D
 
 Elegir alguna variable de I+D y comparar para cada tipo de ganado vacuno, lo mismo con lo de los profesionales
@@ -69,15 +84,19 @@ datos %>%
 ```{r}
 datos %>% 
   group_by(a9,aiv_nueva,a12) %>% 
-  mutate(a12 = case_when(a12 <= 4 ~ "Básico",
-                           a12 <= 6 ~ "Tecnica e universitaria",
-                           a12 > 6 ~ "Otros")) %>% 
+  mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
+                         a12 %in% c(3,4) ~ "Basico superior",
+                           a12 %in% c(5,6) ~ "Tecnico univeritario")) %>% 
+  filter(a12!="Otros") %>% 
+  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
+                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
+                         aiv_nueva %in% c(3,4,5) ~ "3 a 5",
+                           aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
   filter(a9=="1",a12!="0") %>% 
   summarise(n=n()) %>%
   mutate(freq=n/sum(n)) %>%
   ggplot(aes(x=factor(aiv_nueva),y=freq,fill=a12))+
-  geom_bar(stat="identity",position = "dodge",aspect.ratio = 1)+
-  facet_wrap(~a12)
+  geom_bar(stat="identity",aspect.ratio = 1)
 
 ```
 
@@ -85,8 +104,11 @@ datos %>%
 ```{r}
 datos %>% 
   group_by(a9,aiv_nueva) %>% 
+  mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
+                         a12 %in% c(3,4) ~ "Basico superior",
+                           a12 %in% c(5,6) ~ "Tecnico univeritario")) %>%
   filter(a9=="1",a12!="0") %>% 
-  ggplot(aes(x=factor(aiv_nueva)))+
+  ggplot(aes(x=factor(a12)))+
   geom_bar()+
   labs(y="Cantidad")
 ```
