@@ -29,6 +29,8 @@ Trata de un muestreo cuya base muestral fue el censo general agropecuario del 20
 
 En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a traves de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
 
+
+
 ```{r,echo=TRUE}
 datos %>% 
   group_by(a9) %>% 
@@ -43,7 +45,8 @@ datos %>%
 ```
 
 
-```{r}
+```{r,eval=FALSE}
+
 aiv_nueva <- datos %>% 
   mutate(aiv_1 = ifelse(aiv_1 == "2", 0, aiv_1)) %>% 
   mutate(aiv_2 = ifelse(aiv_2 == "2", 0, aiv_2)) %>% 
@@ -54,29 +57,27 @@ aiv_nueva <- datos %>%
   mutate(aiv_7 = ifelse(aiv_7 == "2", 0, aiv_7)) %>% 
   mutate(aiv_8 = ifelse(aiv_8 == "2", 0, aiv_8))
 
-aiv_nueva = rowSums(aiv_nueva[ , c("aiv_1","aiv_2","aiv_3","aiv_4","aiv_5","aiv_6","aiv_7","aiv_8")])
+aio_nueva <- datos %>% 
+  mutate(aio_1 = ifelse(aio_1 == "2", 0, aio_1)) %>% 
+  mutate(aio_2 = ifelse(aio_2 == "2", 0, aio_2)) %>% 
+  mutate(aio_3 = ifelse(aio_3 == "2", 0, aio_3)) %>% 
+  mutate(aio_4 = ifelse(aio_4 == "2", 0, aio_4)) %>% 
+  mutate(aio_5 = ifelse(aio_5 == "2", 0, aio_5)) %>% 
+  mutate(aio_6 = ifelse(aio_6 == "2", 0, aio_6)) %>% 
+  mutate(aio_7 = ifelse(aio_7 == "2", 0, aio_7)) %>% 
+  mutate(aio_8 = ifelse(aio_8 == "2", 0, aio_8))
 
-datos<-cbind(datos,aiv_nueva)
+
+ai_nueva = rowSums(ai_nueva[ , c("aiv_1","aiv_2","aiv_3","aiv_4","aiv_5","aiv_6","aiv_7","aiv_8",
+                                   "aio_1","aio_2","aio_3","aio_4","aio_5","aio_6","aio_7","aio_8")])
+
+datos<-cbind(datos,aiv_nueva,aio_nueva)
 
 datos %>% 
   select(aiv_nueva) %>% 
   arrange(desc(aiv_nueva))
 
 
-```
-
-```{r}
-datos %>% 
-  group_by(a9,aiv_nueva,a12) %>% 
-  mutate(a12 = case_when(a12 <= 4 ~ "Básico",
-                           a12 <= 6 ~ "Tecnica e universitaria",
-                           a12 > 6 ~ "Otros")) %>% 
-  filter(a9=="1",a12!="0") %>% 
-  summarise(n=n()) %>%
-  mutate(freq=n/sum(n)) %>%
-  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=a12))+
-  geom_bar(stat="identity",position = "dodge")+
-  facet_wrap(~a12)
 ```
 
 ```{r}
@@ -94,7 +95,8 @@ datos %>%
   summarise(n=n()) %>%
   mutate(freq=n/sum(n)) %>%
   ggplot(aes(x=factor(aiv_nueva),y=freq,fill=a12))+
-  geom_bar(stat="identity",aspect.ratio = 1)
+  geom_bar(stat="identity",aspect.ratio = 1)+
+  labs(x="",y="Frecuencia")
 
 ```
 
@@ -125,34 +127,33 @@ datos %>%
 ```
 
 
-```{r}
-#Grafico sobre edades de los productores contando como las personas fisicas con edad 0
-ayuda_a10<- factor(datos$a10,labels = c('No persona','Masculino','Femenino'))
-ggplot(datos,aes(x=cut(a11, breaks = 5,labes=FALSE),fill=ayuda_a10))+
-  geom_bar()+ scale_x_discrete(name="Rango de edad",
-                               labels = c('Menor a 20','Entre 20 y 40',
-                                          'Entre 41 y 60','Entre 61 y 80',
-                                          'Mayor a 81'))+labs(y='Cantidad')
+
 #Grafico sobre edades de las personas fisicas
+```{r}
 datos %>% filter(a9!=0,a10!=0,a10>0) %>% 
   ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(a10)))+geom_bar()+                  
   scale_fill_brewer(palette='Dark2')+                                                           
-  labs(x='Rango de edades',y='Cantidad',title='Cantidad de productores por rango de edad')+
+  labs(x='Rango de edades',y='Cantidad')+
   scale_x_discrete(name="Rango de edad",
                    labels = c('Menor a 20','Entre 20 y 40',
                               'Entre 41 y 60','Entre 61 y 80',
-                              'Mayor a 81'))
+                              'Mayor a 81'))+
+  scale_fill_brewer(name="Sexo",palette="Dark2",labels=c('1'='M',
+                                         '2'='F'))
+```
+
+```{r}
 data.frame(datos %>%
              select(a16_1,a16_2,a16_3,a16_4,a16_5) %>%
              filter(a16_1==1|a16_2==1|a16_3==1|a16_4==1|a16_5==1)) %>% 
              mutate('Energia_electrica'=case_when(a16_1==1~"UTE", 
-                                     a16_2==1~ "Grupo electrogeno",
-                                     a16_3==1~"Eolica",
+                                     a16_2==1~ "Grupo electrógeno",
+                                     a16_3==1~"Eólica",
                                      a16_4==1~"Otro",
                                      a16_5==1~ 'No tiene')) %>% select(Energia_electrica) %>%
             group_by(Energia_electrica) %>% summarise(n=n()) %>% 
             ggplot(aes(x=Energia_electrica,y=n,fill=Energia_electrica))+geom_col()+
-  labs(x="Tipo de energia electrica",y='Cantidad',title='Barras sobre el tipo de energia de los productores')
+  labs(x="Tipo de energia electrica",y='Cantidad')
 ```
 
 
