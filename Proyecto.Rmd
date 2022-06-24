@@ -1,11 +1,18 @@
 ---
 title: "Proyecto"
-author: ""
+author: ''
 date: '2022-06-14'
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.pos = 'hbpt', out.extra = '', message = FALSE, warning = FALSE)
+```
+
 ```{r}
+library(ggmosaic)
 library(tidyverse)
 library(here)
 library(readxl)
@@ -67,7 +74,6 @@ geom_polygon() + scale_fill_viridis_d()+
 
 
 ```{r}
-
 aiv_nueva <- datos %>% 
   mutate(aiv_1 = ifelse(aiv_1 == "2", 0, aiv_1)) %>% 
   mutate(aiv_2 = ifelse(aiv_2 == "2", 0, aiv_2)) %>% 
@@ -82,12 +88,6 @@ aiv_nueva = rowSums(aiv_nueva[ ,
                           c("aiv_1","aiv_2","aiv_3","aiv_4","aiv_5","aiv_6","aiv_7","aiv_8")])
 
 datos<-cbind(datos,aiv_nueva)
-
-datos %>% 
-  select(aiv_nueva) %>% 
-  arrange(desc(aiv_nueva))
-
-
 ```
 
 ```{r}
@@ -169,6 +169,21 @@ data.frame(datos %>%
             group_by(Energia_electrica) %>% summarise(n=n()) %>% 
             ggplot(aes(x=Energia_electrica,y=n,fill=Energia_electrica))+geom_col()+
   labs(x="Tipo de energia electrica",y='Cantidad')
+```
+```{r}
+data.frame(datos %>%
+             select(a9,a16_1,a16_2,a16_3,a16_4,a16_5) %>%
+             filter(a16_1==1|a16_2==1|a16_3==1|a16_4==1|a16_5==1)) %>% 
+  mutate('Energia_electrica'=case_when(a16_1==1~"UTE", 
+                                       a16_2==1~ "Grupo electrogeno",
+                                       a16_3==1~"Eolica",
+                                       a16_4==1~"Otro",
+                                       a16_5==1~ 'No tiene')) %>%
+  group_by(Energia_electrica) %>%
+  ggplot()+geom_mosaic(aes(x=product(Energia_electrica,a9),fill=Energia_electrica))+
+  labs(x='Condicion jurídica',y='Tipo de Energía')+
+  scale_fill_brewer(name="Tipo de Energia",palette="Dark2")
+
 ```
 
 
