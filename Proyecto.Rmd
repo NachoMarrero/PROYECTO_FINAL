@@ -9,6 +9,9 @@ output: html_document
 library(tidyverse)
 library(here)
 library(readxl)
+library(xtable)
+library(maptools)
+library(rgdal)
 datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
 ```
 
@@ -29,7 +32,12 @@ Trata de un muestreo cuya base muestral fue el censo general agropecuario del 20
 
 En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a traves de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
 
-
+```{r}
+datos_1 <- data.frame(Variable = c("edad","a9","a12","aiv_nueva",
+"a16_i","dpto","b3_i"),
+Descripcion = c("Edad","Condicion Juridica","Nivel de Educacion","Cantidad de estudios de I+D realizados de 1 a 8","Tipo de energia utilizada","Departamento donde se ubica la propiedad","Tenencia de Tierras"))
+xtable(datos_1)
+```
 
 ```{r,echo=TRUE}
 datos %>% 
@@ -42,6 +50,15 @@ datos %>%
                                                        '2' = 'Sociedad sin contrato',
                                                        '3' = 'Sociedad con contrato legal',
                                                        '4' = 'Otra'))
+```
+
+```{r}
+dframe_depto %>%
+filter(id!=15) %>%
+ggplot(aes(x = long, y = lat, group = group, fill = id)) +
+geom_polygon() + scale_fill_viridis_d()+
+  scale_fill_brewer(palette = "Dark2")
+
 ```
 
 
@@ -81,13 +98,12 @@ datos %>%
                          aiv_nueva %in% c(3,4,5) ~ "3 a 5",
                            aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
   filter(a9=="1",a12!="0") %>% 
-  summarise(n=n()) %>%
+  summarise(n=n() ) %>%
   mutate(freq=n/sum(n)) %>%
   ggplot(aes(x=factor(aiv_nueva),y=freq,fill=a12))+
-  geom_bar(stat="identity",aspect.ratio = 1)+
+  geom_bar(stat="identity")+
   labs(x="Innovación",y="Frecuencia")+
   scale_fill_brewer(name="Nivel educativo",palette = "Set2")
-
 
 ```
 
@@ -128,7 +144,6 @@ datos %>%
 ```{r}
 datos %>% filter(a9!=0,a10!=0,a10>0) %>% 
   ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(a10)))+geom_bar()+                  
-  scale_fill_brewer(palette='Dark2')+                                                           
   labs(x='Rango de edades',y='Cantidad')+
   scale_x_discrete(name="Rango de edad",
                    labels = c('Menor a 20','Entre 20 y 40',
