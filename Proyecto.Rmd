@@ -40,10 +40,13 @@ Trata de un muestreo cuya base muestral fue el censo general agropecuario del 20
 En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a traves de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
 
 ```{r}
+options(xtable.comment = FALSE)
+
 datos_1 <- data.frame(Variable = c("edad","a9","a12","aiv_nueva",
 "a16_i","dpto","b3_i"),
 Descripcion = c("Edad","Condicion Juridica","Nivel de Educacion","Cantidad de estudios de I+D realizados de 1 a 8","Tipo de energia utilizada","Departamento donde se ubica la propiedad","Tenencia de Tierras"))
-xtable(datos_1)
+
+print(xtable(datos_1))
 ```
 
 ```{r,echo=TRUE}
@@ -60,9 +63,7 @@ datos %>%
 ```
 
 ```{r}
-sp_depto <- readOGR(here("Datos"
-,
-"ine_depto.shp"))
+sp_depto <- readOGR(here("Datos","ine_depto.shp"))
 dframe_depto <- ggplot2::fortify(sp_depto)
 dframe_depto <-rename(dframe_depto, dpto = id )
 dframe_depto %>%
@@ -186,6 +187,7 @@ data.frame(datos %>%
   scale_fill_brewer(name="Tipo de Energia",palette="Dark2")
 
 ```
+
 
 
 
