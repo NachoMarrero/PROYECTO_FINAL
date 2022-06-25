@@ -43,8 +43,8 @@ En este trabajo se propone una descripción de los resultados de la encuesta sin
 options(xtable.comment = FALSE)
 
 datos_1 <- data.frame(Variable = c("edad","a9","a12","aiv_nueva",
-"a16_i","dpto","b3_i"),
-Descripcion = c("Edad","Condicion Juridica","Nivel de Educacion","Cantidad de estudios de I+D realizados de 1 a 8","Tipo de energia utilizada","Departamento donde se ubica la propiedad","Tenencia de Tierras"))
+"a16_i","dpto","b3_i","b3_7","est"),
+Descripcion = c("Edad","Condicion Juridica","Nivel de Educacion","Cantidad de estudios de I+D realizados de 1 a 8","Tipo de energia utilizada","Departamento donde se ubica la propiedad","Tenencia de Tierras","Total del territorio en ha","Unidades ganaderas en el territorio (1-8)"))
 
 print(xtable(datos_1))
 ```
@@ -78,6 +78,17 @@ geom_polygon() + scale_fill_viridis_d()+
   scale_fill_brewer()
 
 ```
+```{r}
+datos %>% 
+  mutate(b3_7 = case_when(b3_7 %in% c(1:200)  ~ "0-200",
+                               b3_7 %in% c(201:400)  ~ "200-400",
+                         b3_7 %in% c(401:600)  ~ "400-600",
+                          b3_7 > 600 ~ "600")) %>%
+  ggplot() +
+geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))
+```
+
+
 
 
 ```{r}
