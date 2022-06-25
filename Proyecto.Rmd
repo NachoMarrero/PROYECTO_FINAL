@@ -64,11 +64,14 @@ datos %>%
 
 ```{r}
 sp_depto <- readOGR(here("Datos","ine_depto.shp"))
+
+datos <- right_join(sp_depto@data, datos, by = c("DEPTO"="dpto"))
+
+
 dframe_depto <- ggplot2::fortify(sp_depto)
-dframe_depto <-rename(dframe_depto, dpto = id )
 dframe_depto %>%
-filter(dpto!=15) %>%
-ggplot(aes(x = long, y = lat, group = group, fill = dpto)) +
+filter(id!=15) %>%
+ggplot(aes(x = long, y = lat, group = group, fill = id)) +
 geom_polygon() + scale_fill_viridis_d()+
   scale_fill_brewer()
 
