@@ -67,11 +67,9 @@ sp_depto <- readOGR(here("Datos","ine_depto.shp"))
 sp_depto <- ggplot2::fortify(sp_depto)
 sp_depto <- transform(sp_depto,id=as.numeric(id))
 
+datos <- right_join(sp_depto, datos, by = c("id"="dpto"))
 
-datos <- full_join(sp_depto, datos, by = c("id"="dpto"))
-
-
-dframe_depto <- ggplot2::fortify(sp_depto)
+dframe_depto <- ggplot2::fortify(datos)
 dframe_depto %>%
 filter(id!=15) %>%
 ggplot(aes(x = long, y = lat, group = group, fill = id)) +
