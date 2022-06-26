@@ -3,8 +3,8 @@ title: "Proyecto"
 author: ''
 date: '2022-06-14'
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -44,9 +44,10 @@ options(xtable.comment = FALSE)
 
 datos_1 <- data.frame(Variable = c("edad","a9","a12","aiv_nueva",
                                    "a16_i","dpto","b3_i","b3_7","est"),
-                      Descripcion = c("Edad","Condicion Juridica","Nivel de Educacion","Cantidad de estudios de I+D realizados de 1 a 8","Tipo de energia utilizada","Departamento donde se ubica la propiedad","Tenencia de Tierras","Total del territorio en ha","Unidades ganaderas en el territorio (1-8)"))
+                      Descripcion = c("Edad","Condicion Juridica","Nivel de Educacion","Cantidad Innovaciones realizadas en 8 posibles ramas distintas","Tipo de energia utilizada","Departamento donde se ubica la propiedad","Tenencia de Tierras","Total del territorio en ha","Unidades ganaderas en el territorio (1-8)"))
 
-print(xtable(datos_1))
+
+datos_1 %>% xtable(caption="Descripción de las Variables") %>% print(include.rownames = FALSE)
 ```
 
 
@@ -64,7 +65,7 @@ datos %>%
                                                        '3' = 'Sociedad con contrato legal',
                                                        '4' = 'Otra'))
 ```
-Siguiendo con el analisis de las personas encuestadas, avergiuamos las edades y el sexo de las personas fisicas propietarias. Tambien analizamos el nivel de educacion de los encuestmaos y nos ecnontramos con una muy distribuida poblacion, subvidiviendo en 3 grupos basico, basico superior y terciario, llegamos a que la diferencia en la cantidad de personas en los 3 grupos es muy pequeña, lo que nos lleva a pensar que no hay una relacion entre la tenencia de tierra y el nivel de educacion.
+Siguiendo con el analisis de las personas encuestadas, avergiuamos la distribucion de edades y el sexo de las personas fisicas. Tambien analizamos el nivel de educacion de los encuestmaos y nos encontramos con una poblacion muy bien distribuida en los 3 grupos basico, basico superior y terciario, ya que la diferencia entre estos era muy pequeña, lo que nos lleva a pensar que no hay una relacion entre la tenencia de tierra y el nivel de educacion.
 
 ```{r fig.cap="Notamos que los propietarios son mayormente hombres de entre 40 y 60 años, e incluso tambien de 60 a 80, lo cual demuestra como la tierra esta mayormente en propiedad de personas adultas y adultos mayore."}
 datos %>% filter(a9!=0,a10!=0,a10>0) %>% 
@@ -77,57 +78,9 @@ datos %>% filter(a9!=0,a10!=0,a10>0) %>%
   scale_fill_brewer(name="Sexo",palette="Dark2",labels=c('1'='M',
                                          '2'='F'))
 ```
-```{r}
-datos %>% 
-  group_by(a9,aiv_nueva,a12) %>% 
-  mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
-                         a12 %in% c(3,4) ~ "Básico superior",
-                           a12 %in% c(5,6) ~ "Técnico univeritario")) %>% 
-  filter(a12!="Otros") %>% 
-  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
-                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
-                         aiv_nueva %in% c(3,4,5) ~ "3 a 5",
-                           aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-  filter(a9=="1",a12!="0") %>% 
-  summarise(n=n() ) %>%
-  mutate(freq=n/sum(n)) %>%
-  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=a12))+
-  geom_bar(stat="identity")+
-  labs(x="Innovación",y="Frecuencia")+
-  scale_fill_brewer(name="Nivel educativo",palette = "Set2")
+Continuando con la variable de educacion, investigamos como es la relacion entre el esta y la posibilidad de que haya realizado actividades de innovacion en el periodo. Tambien analisamos si varia la posibilidad de contratar personal profesional paralas innovaciones segun la cantidad de innovaciones realizadas.
 
-```
-
-```{r}
-sp_depto <- readOGR(here("Datos","ine_depto.shp"))
-sp_depto <- ggplot2::fortify(sp_depto)
-sp_depto <- transform(sp_depto,id=as.numeric(id))
-
-datos <- right_join(sp_depto, datos, by = c("id"="dpto"))
-
-dframe_depto <- ggplot2::fortify(datos)
-dframe_depto %>%
-filter(id!=15) %>%
-ggplot(aes(x = long, y = lat, group = group, fill = id)) +
-geom_polygon() + scale_fill_viridis_d()+
-  scale_fill_brewer()
-
-```
-
-```{r}
-datos %>% 
-  mutate(b3_7 = case_when(b3_7 %in% c(1:200)  ~ "0-200",
-                               b3_7 %in% c(201:400)  ~ "200-400",
-                         b3_7 %in% c(401:600)  ~ "400-600",
-                          b3_7 > 600 ~ "600")) %>%
-  ggplot() +
-geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))
-```
-
-
-
-
-```{r}
+```{r, eval=FALSE}
 aiv_nueva <- datos %>% 
   mutate(aiv_1 = ifelse(aiv_1 == "2", 0, aiv_1)) %>% 
   mutate(aiv_2 = ifelse(aiv_2 == "2", 0, aiv_2)) %>% 
@@ -156,12 +109,9 @@ aio_nueva <- datos %>%
 aio_nueva = rowSums(aio_nueva[ ,
                           c("aio_1","aio_2","aio_3","aio_4","aio_5","aio_6","aio_7","aio_8")])
 
-datos<-cbind(datos,aio_nueva)
-datos %>% 
-  select(aiv_nueva,aio_nueva)
 ```
 
-```{r}
+```{r, fig.cap="Observamos una gran correlacion entre estas variblaes, lo cual quiere decir que es mas problable que una persona con mayor grado de estudios innove mas en su produccion que alguien von un menor grado de estudio", eval=FALSE} 
 datos %>% 
   group_by(a9,aiv_nueva,a12) %>% 
   mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
@@ -182,7 +132,7 @@ datos %>%
 
 ```
 
-```{r}
+```{r, eval=FALSE}
 datos %>% 
   group_by(a9,aio_nueva,a12) %>% 
   mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
@@ -202,21 +152,7 @@ datos %>%
   scale_fill_brewer(name="Nivel educativo",palette = "Set3")
 ```
 
-
-
-```{r}
-datos %>% 
-  group_by(a9,aiv_nueva) %>% 
-  mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
-                         a12 %in% c(3,4) ~ "Basico superior",
-                           a12 %in% c(5,6) ~ "Tecnico univeritario")) %>%
-  filter(a9=="1",a12!="0") %>% 
-  ggplot(aes(x=factor(a12)))+
-  geom_bar()+
-  labs(y="Cantidad",x="Nivel educativo")
-```
-
-```{r}
+```{r eval=FALSE}
 datos %>% 
   group_by(a9,aiv_nueva,prof_1) %>%
   mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
@@ -236,6 +172,32 @@ datos %>%
 
 
 
+```{r}
+datos %>% 
+  mutate(b3_7 = case_when(b3_7 %in% c(1:200)  ~ "0-200",
+                               b3_7 %in% c(201:400)  ~ "200-400",
+                         b3_7 %in% c(401:600)  ~ "400-600",
+                          b3_7 > 600 ~ "600")) %>%
+  ggplot() +
+geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```{r}
 data.frame(datos %>%
@@ -250,6 +212,7 @@ data.frame(datos %>%
             ggplot(aes(x=Energia_electrica,y=n,fill=Energia_electrica))+geom_col()+
   labs(x="Tipo de energia electrica",y='Cantidad')
 ```
+
 ```{r}
 data.frame(datos %>%
              select(a9,a16_1,a16_2,a16_3,a16_4,a16_5) %>%
@@ -266,6 +229,17 @@ data.frame(datos %>%
 
 ```
 
+```{r, eval=FALSE}
+datos %>% 
+  group_by(a9,aiv_nueva) %>% 
+  mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
+                         a12 %in% c(3,4) ~ "Basico superior",
+                           a12 %in% c(5,6) ~ "Tecnico univeritario")) %>%
+  filter(a9=="1",a12!="0") %>% 
+  ggplot(aes(x=factor(a12)))+
+  geom_bar()+
+  labs(y="Cantidad",x="Nivel educativo")
+```
 
 
 
