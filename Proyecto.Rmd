@@ -49,7 +49,10 @@ datos_1 <- data.frame(Variable = c("edad","a9","a12","aiv_nueva",
 print(xtable(datos_1))
 ```
 
-```{r,echo=TRUE}
+
+ Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Juridica de los propietarios encuestados.
+ 
+```{r,echo=TRUE, fig.cap= "Podemos observar como la mayor cantidad de encuestados son personas fisicas"}
 datos %>% 
   group_by(a9) %>% 
   ggplot(aes(x=fct_infreq(factor(a9))))+
@@ -60,6 +63,39 @@ datos %>%
                                                        '2' = 'Sociedad sin contrato',
                                                        '3' = 'Sociedad con contrato legal',
                                                        '4' = 'Otra'))
+```
+Siguiendo con el analisis de las personas encuestadas, avergiuamos las edades y el sexo de las personas fisicas propietarias. Tambien analizamos el nivel de educacion de los encuestmaos y nos ecnontramos con una muy distribuida poblacion, subvidiviendo en 3 grupos basico, basico superior y terciario, llegamos a que la diferencia en la cantidad de personas en los 3 grupos es muy pequeña, lo que nos lleva a pensar que no hay una relacion entre la tenencia de tierra y el nivel de educacion.
+
+```{r fig.cap="Notamos que los propietarios son mayormente hombres de entre 40 y 60 años, e incluso tambien de 60 a 80, lo cual demuestra como la tierra esta mayormente en propiedad de personas adultas y adultos mayore."}
+datos %>% filter(a9!=0,a10!=0,a10>0) %>% 
+  ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(a10)))+geom_bar()+                  
+  labs(x='Rango de edades',y='Cantidad')+
+  scale_x_discrete(name="Rango de edad",
+                   labels = c('Menor a 20','Entre 20 y 40',
+                              'Entre 41 y 60','Entre 61 y 80',
+                              'Mayor a 81'))+
+  scale_fill_brewer(name="Sexo",palette="Dark2",labels=c('1'='M',
+                                         '2'='F'))
+```
+```{r}
+datos %>% 
+  group_by(a9,aiv_nueva,a12) %>% 
+  mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
+                         a12 %in% c(3,4) ~ "Básico superior",
+                           a12 %in% c(5,6) ~ "Técnico univeritario")) %>% 
+  filter(a12!="Otros") %>% 
+  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
+                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
+                         aiv_nueva %in% c(3,4,5) ~ "3 a 5",
+                           aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+  filter(a9=="1",a12!="0") %>% 
+  summarise(n=n() ) %>%
+  mutate(freq=n/sum(n)) %>%
+  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=a12))+
+  geom_bar(stat="identity")+
+  labs(x="Innovación",y="Frecuencia")+
+  scale_fill_brewer(name="Nivel educativo",palette = "Set2")
+
 ```
 
 ```{r}
@@ -200,18 +236,6 @@ datos %>%
 
 
 
-#Grafico sobre edades de las personas fisicas
-```{r}
-datos %>% filter(a9!=0,a10!=0,a10>0) %>% 
-  ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(a10)))+geom_bar()+                  
-  labs(x='Rango de edades',y='Cantidad')+
-  scale_x_discrete(name="Rango de edad",
-                   labels = c('Menor a 20','Entre 20 y 40',
-                              'Entre 41 y 60','Entre 61 y 80',
-                              'Mayor a 81'))+
-  scale_fill_brewer(name="Sexo",palette="Dark2",labels=c('1'='M',
-                                         '2'='F'))
-```
 
 ```{r}
 data.frame(datos %>%
