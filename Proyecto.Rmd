@@ -19,25 +19,27 @@ library(readxl)
 library(xtable)
 library(maptools)
 library(rgdal)
+library(patchwork)
+library(plotly)
 datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
 ```
 
 
 ## Introducción
 
-Este proyecto nace como un instrumento para poder aplicar los contenidos aprendidos durante el semestre en un problema real. Se tendrá que demostrar los conocimentos adquiridos al realizar un analisis exploratorio sobre datos de interes nacional, poniendo especial énfasis en la correcta visualización de los resultados obtenidos, realizando una correcta interpretación de la misma. 
+Este proyecto nace como un instrumento para poder aplicar los contenidos aprendidos durante el semestre en un problema real. Se tendrá que demostrar los conocimentos adquiridos al realizar un análisis exploratorio sobre datos de interés nacional, poniendo especial énfasis en la correcta visualización de los resultados obtenidos, realizando una correcta interpretación de la misma. 
 
-En el caso de este grupo en cuestión, se analizarán datos de una encuesta agropecuaria, que fueron elegidos para llevar a cabo estos objetivos, relacionando las caracteristicas de la persona fisica y su territorio con su productividad y tecnologia, entre otras variables. Se utilizará exclusivamente el lenguaje de programación R, y sus respectivas expansiones, como Markdown, Shiny y RStudio.
+En el caso de este grupo en cuestión, se analizarán datos de una encuesta agropecuaria, que fueron elegidos para llevar a cabo estos objetivos, relacionando las características de la persona fisíca y su territorio con su productividad y tecnología, entre otras variables. Se utilizará exclusivamente el lenguaje de programación R, y sus respectivas expansiones, como RMarkdown, Shiny y RStudio.
 
 
 
 ## Datos
 
-Esta encuesta fue realizada por el Ministerio de Ganadería, Agricultura y Pesca del Uruguay.
+Ésta encuesta fue realizada por el Ministerio de Ganadería, Agricultura y Pesca del Uruguay.
 
-Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011 que tenía 25566 explotaciones ganaderas, todas las variables son de tipo double ya que eran preguntas multiple opción (en su mayoría) con una recodificación numérica. Luego se realizó un muestreo por estrato de tamaño y por un criterio geográfico. El tamaño de la muestra resultó ser de 1506 casos (cada observación corresponde a un encuestado) de los cuales algunos fueron descartados(porque ya no eran ganaderos o por otros aspectos) por lo que la muestra final es de 1426.
+Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011 que tenía 25.566 explotaciones ganaderas, todas las variables son de tipo **double** ya que eran preguntas multiple opción (en su mayoría) con una recodificación numérica. Luego se realizó un muestreo por estrato de tamaño y por un criterio geográfico. El tamaño de la muestra resultó ser de 1.506 casos (cada observación corresponde a un encuestado) de los cuales algunos fueron descartados(porque ya no eran ganaderos o por otros aspectos) por lo que la muestra final es de 1.426 .
 
-En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a traves de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
+En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a través de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
 
 ```{r}
 options(xtable.comment = FALSE)
@@ -51,7 +53,7 @@ datos_1 %>% xtable(caption="Descripción de las Variables") %>% print(include.ro
 ```
 
 
- Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Juridica de los propietarios encuestados.
+ Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Jurídica de los propietarios encuestados.
  
 ```{r,echo=TRUE, fig.cap= "Podemos observar como la mayor cantidad de encuestados son personas fisicas"}
 datos %>% 
@@ -65,9 +67,9 @@ datos %>%
                                                        '3' = 'Sociedad con contrato legal',
                                                        '4' = 'Otra'))
 ```
-Siguiendo con el analisis de las personas encuestadas, avergiuamos la distribucion de edades y el sexo de las personas fisicas. Tambien analizamos el nivel de educacion de los encuestmaos y nos encontramos con una poblacion muy bien distribuida en los 3 grupos basico, basico superior y terciario, ya que la diferencia entre estos era muy pequeña, lo que nos lleva a pensar que no hay una relacion entre la tenencia de tierra y el nivel de educacion.
+Siguiendo con el análisis de las personas encuestadas, averiguamos la distribución de edades y el sexo de las personas fisicas. También analizamos el nivel de educacion de los encuestados y nos encontramos con una población muy bien distribuida en los 3 grupos: básico, básico superior y terciario, ya que la diferencia entre éstos era muy pequeña, lo que nos lleva a pensar que no hay una relación entre la tenencia de tierra y el nivel de educación.
 
-```{r fig.cap="Notamos que los propietarios son mayormente hombres de entre 40 y 60 años, e incluso tambien de 60 a 80, lo cual demuestra como la tierra esta mayormente en propiedad de personas adultas y adultos mayore."}
+```{r fig.cap="Notamos que los propietarios son mayormente hombres de entre 40 y 60 años, e incluso tambien de 60 a 80, lo cual demuestra como la tierra está mayormente en propiedad de personas adultas y adultos mayores."}
 datos %>% filter(a9!=0,a10!=0,a10>0) %>% 
   ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(a10)))+geom_bar()+                  
   labs(x='Rango de edades',y='Cantidad')+
@@ -78,7 +80,7 @@ datos %>% filter(a9!=0,a10!=0,a10>0) %>%
   scale_fill_brewer(name="Sexo",palette="Dark2",labels=c('1'='M',
                                          '2'='F'))
 ```
-Continuando con la variable de educacion, investigamos como es la relacion entre el esta y la posibilidad de que haya realizado actividades de innovacion en el periodo. Tambien analisamos si varia la posibilidad de contratar personal profesional paralas innovaciones segun la cantidad de innovaciones realizadas.
+Continuando con la variable de educación, investigamos como es la relación entre ésta y la posibilidad de que haya realizado actividades de innovacion en el período. También analizamos si varía la posibilidad de contratar personal profesional para las innovaciones según la cantidad de innovaciones realizadas.
 
 ```{r, eval=FALSE}
 aiv_nueva <- datos %>% 
@@ -111,7 +113,7 @@ aio_nueva = rowSums(aio_nueva[ ,
 
 ```
 
-```{r, fig.cap="Observamos una gran correlacion entre estas variblaes, lo cual quiere decir que es mas problable que una persona con mayor grado de estudios innove mas en su produccion que alguien von un menor grado de estudio", eval=FALSE} 
+```{r, fig.cap="Observamos una gran correlación entre estas variables, lo cual quiere decir que es más problable que una persona con mayor grado de estudios innove más en su producción que alguien con un menor grado", eval=FALSE} 
 datos %>% 
   group_by(a9,aiv_nueva,a12) %>% 
   mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
@@ -241,6 +243,43 @@ datos %>%
   labs(y="Cantidad",x="Nivel educativo")
 ```
 
+En ésta parte vamos a comparar, con dos diagrama de barras,la frecuencia de, según su Condición Jurídica, si contratan personal profesional y/o personal zafral.
+```{r}
+Cant_CJ<- datos %>% group_by(a9) %>% summarise(Cant=n())
+Cant_Z<-datos %>% filter(pz_1==1,pz_2>0,pz_3>0) %>% group_by(a9) %>% summarise(Cant_z=n())
+Cant_PP<- datos %>% filter(prof_1==1,prof1==1|prof2==1|prof3==1|prof4==1|prof5==1|prof6==1|prof7==1|prof8==1) %>%
+  group_by(a9) %>% summarise(Cant_pp=n())
+tabla_porcentaje<- inner_join(inner_join(Cant_CJ, Cant_Z, by = "a9"),Cant_PP,by="a9") %>%
+  mutate(Porc_PP=Cant_pp/Cant) %>% mutate(Porc_Z=Cant_z/Cant)
+ggplot(tabla_porcentaje)+geom_col(aes(y=Porc_PP*100,x=a9,fill=factor(a9)))+
+  geom_text(aes(x=a9,y=Porc_PP*100,label=round(Porc_PP*100)),vjust=2)+
+  theme(legend.position = 'none')+scale_y_continuous()+
+  labs(y='Porcentaje Personal Profesional')+scale_y_continuous(breaks = c(20,40,60,80))+
+ggplot(tabla_porcentaje)+geom_col(aes(x=a9,y=Porc_Z*100,fill=factor(a9)))+
+  geom_text(aes(x=a9,y=Porc_Z*100,label=round(Porc_Z*100)),vjust=2)+
+  theme(legend.position = 'none')+scale_y_continuous()+
+  labs(y='Porcentaje Personal zafral')+scale_y_continuous(breaks = c(20,40,60,80))
+```
+
+Por otra parte, nos interesó saber el sueldo por jornada de las personas zafral, separando por Condición Jurídica y tratar de ver si los datos nos dan indicio de si dependiendo de su condición se acostumbra a pagar en mayor o menor proporción.
+```{r}
+datos %>% filter(pz_1==1,pz_2>0,pz_3>0) %>% group_by(a9,a12) %>%
+  ggplot()+geom_boxplot(aes(y=pz_3/pz_2,fill=factor(a9)))+
+  scale_y_log10()+facet_grid(~a9)+scale_x_discrete(name='Condicion Juridica')+labs(y="Renumeración/Jornal")
+```
+
+Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.
+```{r}
+gf<-datos %>% filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
+  ggplot(aes(y=pz_2,x=pz_3))+geom_point()+ geom_smooth(method ='lm',color='red',fill='yellow')+
+  scale_y_log10()+scale_x_log10()
+ggplotly(gf)
+```
+
+Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente el sueldo por jornal con un boxplot.
+```{r}
+datos %>% filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))
+```
 
 
 
