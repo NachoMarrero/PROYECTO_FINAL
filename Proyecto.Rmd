@@ -32,7 +32,7 @@ datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
 
 Este proyecto nace como un instrumento para poder aplicar los contenidos aprendidos durante el semestre en un problema real. Se tendrá que demostrar los conocimentos adquiridos al realizar un análisis exploratorio sobre datos de interés nacional, poniendo especial énfasis en la correcta visualización de los resultados obtenidos, realizando una correcta interpretación de la misma. 
 
-En el caso de este grupo en cuestión, se analizarán datos de una encuesta agropecuaria, que fueron elegidos para llevar a cabo estos objetivos, relacionando las características de la persona fisíca y su territorio con su productividad y tecnología, entre otras variables. Se utilizará exclusivamente el lenguaje de programación R, y sus respectivas expansiones, como RMarkdown, Shiny y RStudio.
+En el caso de este grupo en cuestión, se analizarán datos de una encuesta ganadera, que fueron elegidos para llevar a cabo estos objetivos, relacionando las características de la persona fisíca y su territorio con su productividad y tecnología, entre otras variables. Se utilizará exclusivamente el lenguaje de programación R, y sus respectivas expansiones, como RMarkdown, Shiny y RStudio.
 
 \textcolor{violet}{Debe quedar más claro que son los datos,tienen un reporte sobre la encuensta que les puede ayudar para escribir cuál es el objetivo e dicha encuesta y referenciarla, veo que escriben más abajo esto pero en la introduccion deben porner algo más que es una encuesta gropecuaria. Los paquetes y R se deben citar. 
 Les puse el doc que compile a pdf, echo=FALSE para que no salga el código en el doc por defecto y les arreglé la tabla}
@@ -58,7 +58,7 @@ options(xtable.comment = FALSE)
 
 datos_1 <- data.frame(Variable = c("a11","a9","a12","aiv_nueva",
                                    "a16_i","dpto","b3_i","b3_7","est"),
-                      Descripcion = c("Edad","Condicion Juridica","Nivel de Educacion","Cantidad Innovaciones realizadas en 8 posibles ramas distintas","Tipo de energia utilizada","Departamento donde se ubica la propiedad","Tenencia de Tierras","Total del territorio en ha","Unidades ganaderas en el territorio (1-8)"))
+                      Descripcion = c("Edad","Condición Jurídica","Nivel de Educación","Cantidad innovaciones realizadas en 8 posibles ramas distintas","Tipo de energía utilizada","Departamento donde se ubica la propiedad","Tenencia de Tierras","Total del territorio en ha","Unidades ganaderas en el territorio (1-8)"))
 
 
 datos_1 %>% xtable(caption="Descripción de las Variables") %>% print(include.rownames = FALSE)
