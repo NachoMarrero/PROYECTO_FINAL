@@ -3,9 +3,9 @@ title: "Proyecto"
 author: ''
 date: '2022-06-14'
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -63,7 +63,7 @@ datos_1 %>% xtable(caption="Descripción de las Variables") %>% print(include.ro
 ```{r, fig.cap= "Podemos observar como la mayor cantidad de encuestados son personas fisicas"}
 datos %>% 
   group_by(a9) %>% 
-  ggplot(aes(x=fct_infreq(factor(a9)),fill=a9))+
+  ggplot(aes(x=fct_infreq(factor(a9)),fill=factor(a9)))+
   geom_bar()+
   labs(y="Cantidad")+
   scale_x_discrete(name="Condición jurídica",labels = c(
@@ -170,9 +170,9 @@ geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))
 
 
 
-En ésta parte vamos a comparar, con dos diagrama de barras,la frecuencia de, según su Condición Jurídica, si contratan personal profesional y/o personal zafral.
+En ésta parte vamos a comparar, con dos diagrama de barras, el porcentaje el cual segun su Condicion Juridica si contratan tanto sea personal Profesional y/o personal zafral. Para lograr esto, calculamos la cantidad, agrupando por su Condición Jurídica, de que contratan personal zafral y lo dividimos sobre la cantidad de encuestados y multiplicamos por 100, para ver su porcentaje. Usamos el mismo método para el personal profesional contratado por los encuestados. 
 
-```{r}
+```{r,fig.cap="Vemos claramente que los encuestados acostumbran a contratar mayor personal profesional que personal zafral. A pesar de esto, no hay diferencias de proporción segun su Condición Jurídica."}
 Cant_CJ<- datos %>% group_by(a9) %>% summarise(Cant=n())
 
 Cant_Z<-datos %>% filter(pz_1==1,pz_2>0,pz_3>0) %>% group_by(a9) %>% summarise(Cant_z=n())
@@ -201,15 +201,19 @@ ggplot(tabla_porcentaje)+
   scale_y_continuous(breaks = c(20,40,60,80))  
 ```
 
-Por otra parte, nos interesó saber el sueldo por jornada de las personas zafral, separando por Condición Jurídica y tratar de ver si los datos nos dan indicio de si dependiendo de su condición se acostumbra a pagar en mayor o menor proporción.
-```{r}
+Por otra parte, nos interesó averiguar si podiamos encontrar alguna diferencia sobre la renumeración por jornal que perciben los contratados para zafra, agrupando por la Condición Jurídica.
+```{r,fig.cap="Observamos que no hay mucha diferencia entre sus cuartiles y mediana en las 3 primeras condiciones, pero si lo hay en la Condición Jurídica otra la cual tiene sueldo por jornal algunos muy bajos, datos atipicos."}
 datos %>% filter(pz_1==1,pz_2>0,pz_3>0) %>% group_by(a9,a12) %>%
   ggplot()+geom_boxplot(aes(y=pz_3/pz_2,fill=factor(a9)))+
   scale_y_log10()+facet_grid(~a9)+scale_x_discrete(name='Condicion Juridica')+labs(y="Renumeración/Jornal")
 ```
+Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente el sueldo por jornal con un boxplot.
+```{r, fig.cap="Vemos que el sueldo por jornal de las personas zafrales se comprende entre menos de 1000$, y varios outliers."}
+datos %>% filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))
+```
 
 Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.
-```{r}
+```{r,fig.cap="Observamos clara relacion lineal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración."}
 gf<-datos %>%
   filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
   ggplot(aes(y=pz_2,x=pz_3))+geom_point()+
@@ -217,12 +221,6 @@ gf<-datos %>%
   scale_y_log10()+scale_x_log10()
 ggplotly(gf)
 ```
-
-Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente el sueldo por jornal con un boxplot.
-```{r}
-datos %>% filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))
-```
-
 
 \textcolor{violet}{En cada gráfico deben poner el nombre del mismo y variables que presentan. El comentario puede también ser extendido en el texto y usar referencias cruzadas. Hay varios sin comentar supongo que están trabajando en ellos, mañana vemos si hay alguna otra variable interesante para incluir en el análisis. No tienen nada sobre la aplicación tienen que ponerse a trabajar en la app}
 
