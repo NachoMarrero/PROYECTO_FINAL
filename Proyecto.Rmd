@@ -3,12 +3,11 @@ title: "Proyecto"
 author: ''
 date: '2022-06-14'
 output:
-  html_document: default
   pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.pos = 'hbpt', out.extra = '', message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = FALSE, fig.pos = 'hbpt', out.extra = '', message = FALSE, warning = FALSE)
 ```
 
 ```{r}
@@ -31,7 +30,8 @@ Este proyecto nace como un instrumento para poder aplicar los contenidos aprendi
 
 En el caso de este grupo en cuestión, se analizarán datos de una encuesta agropecuaria, que fueron elegidos para llevar a cabo estos objetivos, relacionando las características de la persona fisíca y su territorio con su productividad y tecnología, entre otras variables. Se utilizará exclusivamente el lenguaje de programación R, y sus respectivas expansiones, como RMarkdown, Shiny y RStudio.
 
-
+\textcolor{violet}{Debe quedar más claro que son los datos,tienen un reporte sobre la encuensta que les puede ayudar para escribir cuál es el objetivo e dicha encuesta y referenciarla, veo que escriben más abajo esto pero en la introduccion deben porner algo más que es una encuesta gropecuaria. Los paquetes y R se deben citar. 
+Les puse el doc que compile a pdf, echo=FALSE para que no salga el código en el doc por defecto y les arreglé la tabla}
 
 ## Datos
 
@@ -41,7 +41,7 @@ Trata de un muestreo cuya base muestral fue el censo general agropecuario del 20
 
 En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a través de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
 
-```{r}
+```{r, results='asis'}
 options(xtable.comment = FALSE)
 
 datos_1 <- data.frame(Variable = c("edad","a9","a12","aiv_nueva",
@@ -55,7 +55,7 @@ datos_1 %>% xtable(caption="Descripción de las Variables") %>% print(include.ro
 
  Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Jurídica de los propietarios encuestados.
  
-```{r,echo=TRUE, fig.cap= "Podemos observar como la mayor cantidad de encuestados son personas fisicas"}
+```{r, fig.cap= "Podemos observar como la mayor cantidad de encuestados son personas fisicas"}
 datos %>% 
   group_by(a9) %>% 
   ggplot(aes(x=fct_infreq(factor(a9))))+
@@ -67,7 +67,12 @@ datos %>%
                                                        '3' = 'Sociedad con contrato legal',
                                                        '4' = 'Otra'))
 ```
+
+\textcolor{violet}{Deben incluir referencias cruzadas y en la figura debe aparecer el nombre del gráfico y la variable o variables que están graficando. Comentar lo que ven en las figuras siempre, revisen ortografía! faltan muchos tildes...}
+
 Siguiendo con el análisis de las personas encuestadas, averiguamos la distribución de edades y el sexo de las personas fisicas. También analizamos el nivel de educacion de los encuestados y nos encontramos con una población muy bien distribuida en los 3 grupos: básico, básico superior y terciario, ya que la diferencia entre éstos era muy pequeña, lo que nos lleva a pensar que no hay una relación entre la tenencia de tierra y el nivel de educación.
+
+\textcolor{violet}{Recodificaron la variale nivel educativo? pongan en esos tres niveles como los agruparon ustedes. }
 
 ```{r fig.cap="Notamos que los propietarios son mayormente hombres de entre 40 y 60 años, e incluso tambien de 60 a 80, lo cual demuestra como la tierra está mayormente en propiedad de personas adultas y adultos mayores."}
 datos %>% filter(a9!=0,a10!=0,a10>0) %>% 
@@ -80,6 +85,8 @@ datos %>% filter(a9!=0,a10!=0,a10>0) %>%
   scale_fill_brewer(name="Sexo",palette="Dark2",labels=c('1'='M',
                                          '2'='F'))
 ```
+
+
 Continuando con la variable de educación, investigamos como es la relación entre ésta y la posibilidad de que haya realizado actividades de innovacion en el período. También analizamos si varía la posibilidad de contratar personal profesional para las innovaciones según la cantidad de innovaciones realizadas.
 
 ```{r, eval=FALSE}
@@ -282,4 +289,4 @@ datos %>% filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% summarise('Sueldo_por_jor
 ```
 
 
-
+\textcolor{violet}{En cada gráfico deben poner el nombre del mismo y variables que presentan. El comentario puede también ser extendido en el texto y usar referencias cruzadas. Hay varios sin comentar supongo que están trabajando en ellos, mañana vemos si hay alguna otra variable interesante para incluir en el análisis. No tienen nada sobre la aplicación tienen que ponerse a trabajar en la app}
