@@ -226,17 +226,24 @@ ggplotly(gf)
 
 
 ```{r}
-datos <- datos%>%
-  select("a11","a9","a12","aiv_nueva"
-                                   ,"dpto","b3_7","est")
+data <- datos %>%
+  select("dpto","est")
 
 sp_depto <- readOGR(here("Datos","ine_depto.shp"))
 sp_depto <- ggplot2::fortify(sp_depto)
 sp_depto <- transform(sp_depto,id=as.numeric(id))
 
-datos <- right_join(sp_depto, datos, by = c("id"="dpto"))
+datos <- right_join(sp_depto, data, by = c("id"="dpto"))
 
 dframe_depto <- ggplot2::fortify(datos)
+
+dframe_depto <- dframe_depto%>%
+  select("id","est","long","lat")
+
+dframe_depto%>%
+filter(id!=15) %>%
+ggplot(aes(x = long, y = lat)) +
+geom_polygon()
 
 ```
 
