@@ -174,19 +174,31 @@ En ésta parte vamos a comparar, con dos diagrama de barras,la frecuencia de, se
 
 ```{r}
 Cant_CJ<- datos %>% group_by(a9) %>% summarise(Cant=n())
+
 Cant_Z<-datos %>% filter(pz_1==1,pz_2>0,pz_3>0) %>% group_by(a9) %>% summarise(Cant_z=n())
+
 Cant_PP<- datos %>% filter(prof_1==1,prof1==1|prof2==1|prof3==1|prof4==1|prof5==1|prof6==1|prof7==1|prof8==1) %>%
-  group_by(a9) %>% summarise(Cant_pp=n())
+  group_by(a9) %>% 
+  summarise(Cant_pp=n())
+
 tabla_porcentaje<- inner_join(inner_join(Cant_CJ, Cant_Z, by = "a9"),Cant_PP,by="a9") %>%
-  mutate(Porc_PP=Cant_pp/Cant) %>% mutate(Porc_Z=Cant_z/Cant)
-ggplot(tabla_porcentaje)+geom_col(aes(y=Porc_PP*100,x=a9,fill=factor(a9)))+
+  mutate(Porc_PP=Cant_pp/Cant) %>%
+  mutate(Porc_Z=Cant_z/Cant)
+
+ggplot(tabla_porcentaje)+
+  geom_col(aes(y=Porc_PP*100,x=a9,fill=factor(a9)))+
   geom_text(aes(x=a9,y=Porc_PP*100,label=round(Porc_PP*100)),vjust=2)+
-  theme(legend.position = 'none')+scale_y_continuous()+
-  labs(y='Porcentaje Personal Profesional')+scale_y_continuous(breaks = c(20,40,60,80))+
-ggplot(tabla_porcentaje)+geom_col(aes(x=a9,y=Porc_Z*100,fill=factor(a9)))+
+  theme(legend.position = 'none')+
+  scale_y_continuous()+
+  labs(y='Porcentaje Personal Profesional')+
+  scale_y_continuous(breaks = c(20,40,60,80))+
+ggplot(tabla_porcentaje)+
+  geom_col(aes(x=a9,y=Porc_Z*100,fill=factor(a9)))+
   geom_text(aes(x=a9,y=Porc_Z*100,label=round(Porc_Z*100)),vjust=2)+
-  theme(legend.position = 'none')+scale_y_continuous()+
-  labs(y='Porcentaje Personal zafral')+scale_y_continuous(breaks = c(20,40,60,80))  
+  theme(legend.position = 'none')+
+  scale_y_continuous()+
+  labs(y='Porcentaje Personal zafral')+
+  scale_y_continuous(breaks = c(20,40,60,80))  
 ```
 
 Por otra parte, nos interesó saber el sueldo por jornada de las personas zafral, separando por Condición Jurídica y tratar de ver si los datos nos dan indicio de si dependiendo de su condición se acostumbra a pagar en mayor o menor proporción.
@@ -198,8 +210,10 @@ datos %>% filter(pz_1==1,pz_2>0,pz_3>0) %>% group_by(a9,a12) %>%
 
 Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.
 ```{r}
-gf<-datos %>% filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
-  ggplot(aes(y=pz_2,x=pz_3))+geom_point()+ geom_smooth(formula= y ~ x,method ='lm',color='red',fill='yellow')+
+gf<-datos %>%
+  filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
+  ggplot(aes(y=pz_2,x=pz_3))+geom_point()+
+  geom_smooth(formula= y ~ x,method ='lm',color='red',fill='yellow')+
   scale_y_log10()+scale_x_log10()
 ggplotly(gf)
 ```
