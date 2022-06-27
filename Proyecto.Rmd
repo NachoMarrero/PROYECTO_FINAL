@@ -39,9 +39,17 @@ Les puse el doc que compile a pdf, echo=FALSE para que no salga el código en el
 
 ## Datos
 
-Ésta encuesta fue realizada por el Ministerio de Ganadería, Agricultura y Pesca del Uruguay.
+Ésta encuesta fue realizada por el Ministerio de Ganadería, Agricultura y Pesca del Uruguay, y las  organizaciones que participaron fueron el Banco Central del Uruguay (BCU), Instituto Nacional de
+Investigación Agropecuaria (INIA), Agencia de Evaluación de la OPP (AGEV), Agencia Nacional
+de Investigación e Innovación (ANII), Secretariado Uruguayo de la Lana (SUL), y la Unidad de
+Gestión de Proyectos (UGP) del MGAP.
 
-Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011 que tenía 25.566 explotaciones ganaderas, todas las variables son de tipo **double** ya que eran preguntas multiple opción (en su mayoría) con una recodificación numérica. Luego se realizó un muestreo por estrato de tamaño y por un criterio geográfico. El tamaño de la muestra resultó ser de 1.506 casos (cada observación corresponde a un encuestado) de los cuales algunos fueron descartados(porque ya no eran ganaderos o por otros aspectos) por lo que la muestra final es de 1.426 .
+El principal objetivo de la encuesta es es lograr una estimación del consumo intermedio de las actividades agropecuarias, realizando una encuesta económica del sector ganadero ovino y bovino uruguayo para relevar
+información sobre los tipos y la intensidad de utilización de insumos según diferentes tecnologías, la
+disposición innovadora de los agentes, el trabajo empleado y los gastos generales incurridos por las
+unidades de producción.
+
+Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011 que tenía 25.566 explotaciones ganaderas, todas las variables son de tipo **double** ya que eran preguntas multiple opción (en su mayoría) con una recodificación numérica. Luego se realizó un muestreo por estrato de tamaño y por un criterio geográfico. El tamaño de la muestra resultó ser de 1.506 casos (explotacion con actividad principal a la ganaderia vacuna o ovina) algunos fueron descartados (porque ya no eran ganaderos o por otros aspectos) por lo que la muestra final es de 1.426 .
 
 En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a través de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
 
@@ -58,9 +66,9 @@ datos_1 %>% xtable(caption="Descripción de las Variables") %>% print(include.ro
 
 ## Analisis
 
- Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Jurídica de los propietarios encuestados.
+ Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Jurídica de los propietarios encuestados. Observamos como en su mayoria son Personas fisicas, 
  
-```{r, fig.cap= "Podemos observar como la mayor cantidad de encuestados son personas fisicas"}
+```{r, fig.cap= "Condicion Juridica de los encuestados"}
 datos %>% 
   group_by(a9) %>% 
   ggplot(aes(x=fct_infreq(factor(a9)),fill=factor(a9)))+
