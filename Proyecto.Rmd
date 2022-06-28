@@ -83,7 +83,7 @@ datos_1 %>%
 
 ## Análisis 1
 
- Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Jurídica de los propietarios encuestados. Observamos como en su mayoria son Personas fisicas.
+Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condición jurídica de los propietarios encuestados. Observamos como en su mayoría son personas físicas.
  
 ```{r, fig.cap= "Gráfico de barras sobre la condicion Juridica de los encuestados"}
 
@@ -195,8 +195,9 @@ datos %>%
                           b3_7 > 600 ~ "600")) %>%
   ggplot() +
   geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))+
-    scale_fill_brewer(palette = "Set2")+
-  labs(x="Estrato de tamaño",y="Tenencia de la tierra",fill="Tenencia de la tierra")+ theme_bw()
+  scale_fill_brewer(palette = "Set2")+
+  labs(x="Estrato de tamaño",y="Tenencia de la tierra",fill="Tenencia de la tierra")+
+  theme_bw()
 ```
 
 En ésta parte vamos a comparar, con dos diagramas de barras, el porcentaje el cual según su condicion jurídica si contratan tanto sea personal profesional y/o personal zafral. Para lograr esto, calculamos la cantidad, agrupando por su condición jurídica, de que contratan personal zafral y lo dividimos sobre la cantidad de encuestados y multiplicamos por 100, para ver su porcentaje. Usamos el mismo método para el personal profesional contratado por los encuestados. 
