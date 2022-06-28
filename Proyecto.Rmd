@@ -81,9 +81,9 @@ datos_1 %>%
   print(include.rownames = FALSE)
 ```
 
-## Analisis
+## Analisis 1
 
- Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Jurídica de los propietarios encuestados. Observamos como en su mayoria son Personas fisicas, 
+ Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Jurídica de los propietarios encuestados. Observamos como en su mayoria son Personas fisicas.
  
 ```{r, fig.cap= "Gráfico de barras de la condicion Juridica de los encuestados"}
 
@@ -96,18 +96,18 @@ datos %>%
                                                        '1' = 'Persona física',
                                                        '2' = 'Sociedad sin contrato',
                                                        '3' = 'Sociedad con \n contrato legal',
-                                                       '4' = 'Otra')) +
+                                                       '4' = 'Otra'),palette="Accent") +
   theme_bw()+
   theme(legend.position='none') 
 ```
 
 \textcolor{violet}{Deben incluir referencias cruzadas y en la figura debe aparecer el nombre del gráfico y la variable o variables que están graficando. Comentar lo que ven en las figuras siempre, revisen ortografía! faltan muchos tildes...}
 
-Siguiendo con el análisis de las personas encuestadas, averiguamos la distribución de edades y el sexo de las personas fisicas. También analizamos el nivel de educacion de los encuestados y nos encontramos con una población muy bien distribuida en los 3 grupos: básico, básico superior y terciario, ya que la diferencia entre éstos era muy pequeña, lo que nos lleva a pensar que no hay una relación entre la tenencia de tierra y el nivel de educación.
+Siguiendo con el análisis de las personas encuestadas, averiguamos la distribución de edades y el sexo de las personas fisicas. También analizamos el nivel de educacion de los encuestados (reagrupando la variable en 3 niveles "basico" que equivale a los niveles de estudio ninguno y primario "secundaria" que equivale a secundaria basica y superior, y por ultimo, nivel "tecnico o Univarsitario" que son los niveles universitario y tecnico) y nos encontramos con una población muy bien distribuida en los 3 grupos,  lo que nos lleva a pensar que no hay una relación entre la tenencia de tierra y el nivel de educación.
 
 \textcolor{violet}{Recodificaron la variale nivel educativo? pongan en esos tres niveles como los agruparon ustedes. }
 
-```{r fig.cap="Notamos que los propietarios son mayormente hombres de entre 40 y 60 años, e incluso tambien de 60 a 80, lo cual demuestra como la tierra está mayormente en propiedad de personas adultas y adultos mayores."}
+```{r fig.cap="Grafico de Barras correspondiente a las cantidades y la relacion entre edades y sexo de las personas fisicas encuestadas."}
 
 datos %>% filter(a9!=0,a10!=0,a10>0) %>% 
   ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(a10)))+geom_bar()+                  
@@ -116,12 +116,12 @@ datos %>% filter(a9!=0,a10!=0,a10>0) %>%
                    labels = c('Menor a 20','Entre 20 y 40',
                               'Entre 41 y 60','Entre 61 y 80',
                               'Mayor a 81'))+
-  scale_fill_brewer(name="Sexo",palette="Dark2",labels=c('1'='M',
+  scale_fill_brewer(name="Sexo",palette="Accent",labels=c('1'='M',
                                          '2'='F'))+ theme_bw()
 ```
 
 
-Continuando con la variable de educación,(la reagrupamos en 3 niveles basico, basico superior y tecnico universitario) investigamos como es la relación entre ésta y la posibilidad de que haya realizado actividades de innovacion en el período. También analizamos si varía la posibilidad de contratar personal profesional para las innovaciones según la cantidad de innovaciones realizadas.
+Continuando con la variable de educación, y manteniendo la reagrupacion anterior, investigamos como es la relación entre ésta y la posibilidad de que haya realizado actividades de innovacion en el período (siendo 8 el maximo numero posible de distintas innovaciones), en el cual observamos que las personas con mayor nivel educativo son mas propensas a realizar innovaciones. También analizamos si varía la posibilidad de contratar personal profesional para las innovaciones según la cantidad de innovaciones realizadas, podemos visualizar como la cantidad de personal profesional contratado e mayor en quienes mas innovaciones realizaron, podriamos deducir que quienes mas innovan tambien mas se preocupan por el personal contratado para dicha actividad.
 
 ```{r}
 aiv_nueva <- datos %>% 
@@ -137,17 +137,14 @@ aiv_nueva <- datos %>%
 aiv_nueva = rowSums(aiv_nueva[ ,c("aiv_1","aiv_2","aiv_3","aiv_4","aiv_5","aiv_6","aiv_7","aiv_8")])
 
 datos<-cbind(datos,aiv_nueva)
-
-
-
 ```
 
-```{r, fig.cap="Observamos una gran correlación entre estas variables, lo cual quiere decir que es más problable que una persona con mayor grado de estudios innove más en su producción que alguien con un menor grado"} 
+```{r, fig.cap="Grafico de Barras apiladas que refiere a la posibilidad de realizar innovaciones segun el nivel educativo del propietario."} 
 
 datos %>% 
   group_by(a9,aiv_nueva,a12) %>% 
   mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
-                         a12 %in% c(3,4) ~ "Básico superior",
+                         a12 %in% c(3,4) ~ "Secundaria",
                          a12 %in% c(5,6) ~ "Técnico univeritario")) %>% 
   filter(a12!="Otros") %>% 
   mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
@@ -160,10 +157,9 @@ datos %>%
   ggplot(aes(x=factor(aiv_nueva),y=freq,fill=a12))+
   geom_bar(stat="identity")+
   labs(x="Innovación",y="Frecuencia")+
-  scale_fill_brewer(name="Nivel educativo",palette = "Set2")
+  scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
 
 ```
-
 
 ```{r eval=FALSE}
 datos %>% 
@@ -180,8 +176,10 @@ datos %>%
   labs(x="Innovación",y="Frecuencia")+
   scale_fill_brewer(name="Personal profesional",palette = "Accent",labels = c(
                                                        '1' = 'Si',
-                                                       '2' = 'No'))
+                                                       '2' = 'No'))+ theme_bw()
 ```
+
+## Analisis 2
 
 ```{r}
 datos %>% 
@@ -191,7 +189,7 @@ datos %>%
                           b3_7 > 600 ~ "600")) %>%
   ggplot() +
   geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))+
-  labs(x="Estrato de tamaño",y="Tenencia de la tierra",fill="Tenencia de la tierra")
+  labs(x="Estrato de tamaño",y="Tenencia de la tierra",fill="Tenencia de la tierra")+ theme_bw()
 ```
 
 En ésta parte vamos a comparar, con dos diagramas de barras, el porcentaje el cual según su Condicion Jurídica si contratan tanto sea personal Profesional y/o personal zafral. Para lograr esto, calculamos la cantidad, agrupando por su Condición Jurídica, de que contratan personal zafral y lo dividimos sobre la cantidad de encuestados y multiplicamos por 100, para ver su porcentaje. Usamos el mismo método para el personal profesional contratado por los encuestados. 
