@@ -178,7 +178,7 @@ geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))
 
 
 
-En ésta parte vamos a comparar, con dos diagrama de barras, el porcentaje el cual segun su Condicion Juridica si contratan tanto sea personal Profesional y/o personal zafral. Para lograr esto, calculamos la cantidad, agrupando por su Condición Jurídica, de que contratan personal zafral y lo dividimos sobre la cantidad de encuestados y multiplicamos por 100, para ver su porcentaje. Usamos el mismo método para el personal profesional contratado por los encuestados. 
+En ésta parte vamos a comparar, con dos diagramas de barras, el porcentaje el cual según su Condicion Jurídica si contratan tanto sea personal Profesional y/o personal zafral. Para lograr esto, calculamos la cantidad, agrupando por su Condición Jurídica, de que contratan personal zafral y lo dividimos sobre la cantidad de encuestados y multiplicamos por 100, para ver su porcentaje. Usamos el mismo método para el personal profesional contratado por los encuestados. 
 
 ```{r,fig.cap="Vemos claramente que los encuestados acostumbran a contratar mayor personal profesional que personal zafral. A pesar de esto, no hay diferencias de proporción segun su Condición Jurídica."}
 Cant_CJ<- datos %>% group_by(a9) %>% summarise(Cant=n())
