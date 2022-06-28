@@ -184,7 +184,10 @@ datos %>%
 
 ## Análisis 2
 
-```{r}
+En esta parte del analisis veremois caracteristicas mas propias de las explotaciones.
+Primero veremos si existen terrenos con muy poca extension y grandes cantidades de Unidades Ganaderas, observamos que hay muy pocos productores con mas de 5 UG que tengan terrenos de menos de 600ha, tambien notamos que hay una gran distrubucion del estrato que poseen para todos los encuetasdos, hay similiar cantidad de grandes productores como de pequeños.
+
+```{r fig.cap="Unidades Ganaderas segun la extension del territorio"}
 datos %>% 
   mutate(b3_7 = case_when(b3_7 %in% c(1:200)  ~ "0-200",
                           b3_7 %in% c(201:400)  ~ "200-400",
@@ -192,6 +195,7 @@ datos %>%
                           b3_7 > 600 ~ "600")) %>%
   ggplot() +
   geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))+
+    scale_fill_brewer(palette = "Set2")+
   labs(x="Estrato de tamaño",y="Tenencia de la tierra",fill="Tenencia de la tierra")+ theme_bw()
 ```
 
