@@ -56,19 +56,37 @@ En este trabajo se propone una descripción de los resultados de la encuesta sin
 ```{r, results='asis'}
 options(xtable.comment = FALSE)
 
-datos_1 <- data.frame(Variable = c("a11","a9","a12","aiv_nueva",
-                                   "a16_i","dpto","b3_i","b3_7","est"),
-                      Descripcion = c("Edad","Condición Jurídica","Nivel de Educación","Cantidad innovaciones realizadas en 8 posibles ramas distintas","Tipo de energía utilizada","Departamento donde se ubica la propiedad","Tenencia de Tierras","Total del territorio en ha","Unidades ganaderas en el territorio (1-8)"))
+datos_1 <- data.frame(Variable = c("a11",
+                                   "a9",
+                                   "a12",
+                                   "aiv_nueva",
+                                   "a16_i",
+                                   "dpto",
+                                   "b3_i",
+                                   "b3_7",
+                                   "est"),
+                      Descripcion = c("Edad",
+                                      "Condición Jurídica",
+                                      "Nivel de Educación",
+                                      "Cantidad innovaciones realizadas en 8 posibles ramas distintas",
+                                      "Tipo de energía utilizada",
+                                      "Departamento donde se ubica la propiedad",
+                                      "Tenencia de Tierras",
+                                      "Total del territorio en ha",
+                                      "Unidades ganaderas en el territorio (1-8)"))
 
 
-datos_1 %>% xtable(caption="Descripción de las Variables") %>% print(include.rownames = FALSE)
+datos_1 %>% 
+  xtable(caption="Descripción de las Variables") %>%
+  print(include.rownames = FALSE)
 ```
 
 ## Analisis
 
  Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condicion Jurídica de los propietarios encuestados. Observamos como en su mayoria son Personas fisicas, 
  
-```{r, fig.cap= "Condicion Juridica de los encuestados"}
+```{r, fig.cap= "Gráfico de barras de la condicion Juridica de los encuestados"}
+
 datos %>% 
   group_by(a9) %>% 
   ggplot(aes(x=fct_infreq(factor(a9)),fill=factor(a9)))+
@@ -78,7 +96,8 @@ datos %>%
                                                        '1' = 'Persona física',
                                                        '2' = 'Sociedad sin contrato',
                                                        '3' = 'Sociedad con \n contrato legal',
-                                                       '4' = 'Otra')) + theme_bw()+
+                                                       '4' = 'Otra')) +
+  theme_bw()+
   theme(legend.position='none') 
 ```
 
@@ -89,6 +108,7 @@ Siguiendo con el análisis de las personas encuestadas, averiguamos la distribuc
 \textcolor{violet}{Recodificaron la variale nivel educativo? pongan en esos tres niveles como los agruparon ustedes. }
 
 ```{r fig.cap="Notamos que los propietarios son mayormente hombres de entre 40 y 60 años, e incluso tambien de 60 a 80, lo cual demuestra como la tierra está mayormente en propiedad de personas adultas y adultos mayores."}
+
 datos %>% filter(a9!=0,a10!=0,a10>0) %>% 
   ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(a10)))+geom_bar()+                  
   labs(x='Rango de edades',y='Cantidad')+
@@ -114,8 +134,7 @@ aiv_nueva <- datos %>%
   mutate(aiv_7 = ifelse(aiv_7 == "2", 0, aiv_7)) %>% 
   mutate(aiv_8 = ifelse(aiv_8 == "2", 0, aiv_8))
 
-aiv_nueva = rowSums(aiv_nueva[ ,
-                          c("aiv_1","aiv_2","aiv_3","aiv_4","aiv_5","aiv_6","aiv_7","aiv_8")])
+aiv_nueva = rowSums(aiv_nueva[ ,c("aiv_1","aiv_2","aiv_3","aiv_4","aiv_5","aiv_6","aiv_7","aiv_8")])
 
 datos<-cbind(datos,aiv_nueva)
 
@@ -123,17 +142,18 @@ datos<-cbind(datos,aiv_nueva)
 
 ```
 
-```{r, fig.cap="Observamos una gran correlación entre estas variables, lo cual quiere decir que es más problable que una persona con mayor grado de estudios innove más en su producción que alguien con un menor grado", eval=FALSE} 
+```{r, fig.cap="Observamos una gran correlación entre estas variables, lo cual quiere decir que es más problable que una persona con mayor grado de estudios innove más en su producción que alguien con un menor grado"} 
+
 datos %>% 
   group_by(a9,aiv_nueva,a12) %>% 
   mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
                          a12 %in% c(3,4) ~ "Básico superior",
-                           a12 %in% c(5,6) ~ "Técnico univeritario")) %>% 
+                         a12 %in% c(5,6) ~ "Técnico univeritario")) %>% 
   filter(a12!="Otros") %>% 
   mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
                                aiv_nueva %in% c(1,2)  ~ "1 o 2",
-                         aiv_nueva %in% c(3,4,5) ~ "3 a 5",
-                           aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+                               aiv_nueva %in% c(3,4,5) ~ "3 a 5",
+                               aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
   filter(a9=="1",a12!="0") %>% 
   summarise(n=n() ) %>%
   mutate(freq=n/sum(n)) %>%
@@ -163,29 +183,31 @@ datos %>%
                                                        '2' = 'No'))
 ```
 
-
-
 ```{r}
 datos %>% 
   mutate(b3_7 = case_when(b3_7 %in% c(1:200)  ~ "0-200",
-                               b3_7 %in% c(201:400)  ~ "200-400",
-                         b3_7 %in% c(401:600)  ~ "400-600",
+                          b3_7 %in% c(201:400)  ~ "200-400",
+                          b3_7 %in% c(401:600)  ~ "400-600",
                           b3_7 > 600 ~ "600")) %>%
   ggplot() +
-geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))
+  geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))+
+  labs(x="Estrato de tamaño",y="Tenencia de la tierra",fill="Tenencia de la tierra")
 ```
-
-
-
 
 En ésta parte vamos a comparar, con dos diagramas de barras, el porcentaje el cual según su Condicion Jurídica si contratan tanto sea personal Profesional y/o personal zafral. Para lograr esto, calculamos la cantidad, agrupando por su Condición Jurídica, de que contratan personal zafral y lo dividimos sobre la cantidad de encuestados y multiplicamos por 100, para ver su porcentaje. Usamos el mismo método para el personal profesional contratado por los encuestados. 
 
 ```{r,fig.cap="Vemos claramente que los encuestados acostumbran a contratar mayor personal profesional que personal zafral. A pesar de esto, no hay diferencias de proporción segun su Condición Jurídica."}
-Cant_CJ<- datos %>% group_by(a9) %>% summarise(Cant=n())
 
-Cant_Z<-datos %>% filter(pz_1==1,pz_2>0,pz_3>0) %>% group_by(a9) %>% summarise(Cant_z=n())
+Cant_CJ<- datos %>%
+  group_by(a9) %>% summarise(Cant=n())
 
-Cant_PP<- datos %>% filter(prof_1==1,prof1==1|prof2==1|prof3==1|prof4==1|prof5==1|prof6==1|prof7==1|prof8==1) %>%
+Cant_Z<-datos %>% 
+  filter(pz_1==1,pz_2>0,pz_3>0) %>% 
+  group_by(a9) %>% 
+  summarise(Cant_z=n())
+
+Cant_PP<- datos %>% 
+  filter(prof_1==1,prof1==1|prof2==1|prof3==1|prof4==1|prof5==1|prof6==1|prof7==1|prof8==1) %>%
   group_by(a9) %>% 
   summarise(Cant_pp=n())
 
@@ -210,23 +232,38 @@ ggplot(tabla_porcentaje)+
 ```
 
 Por otra parte, nos interesó averiguar si podiamos encontrar alguna diferencia sobre la renumeración por jornal que perciben los contratados para zafra, agrupando por la Condición Jurídica.
+
 ```{r,fig.cap="Observamos que no hay mucha diferencia entre sus cuartiles y mediana en las 3 primeras condiciones, pero si lo hay en la Condición Jurídica otra la cual tiene sueldo por jornal algunos muy bajos, datos atipicos."}
-datos %>% filter(pz_1==1,pz_2>0,pz_3>0) %>% group_by(a9,a12) %>%
+
+datos %>% 
+  filter(pz_1==1,pz_2>0,pz_3>0) %>% 
+  group_by(a9,a12) %>%
   ggplot()+geom_boxplot(aes(y=pz_3/pz_2,fill=factor(a9)))+
-  scale_y_log10()+facet_grid(~a9)+scale_x_discrete(name='Condicion Juridica')+labs(y="Renumeración/Jornal")
+  scale_y_log10()+
+  facet_grid(~a9)+
+  scale_x_discrete(name='Condicion Juridica')+
+  labs(y="Renumeración/Jornal")
 ```
 Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente el sueldo por jornal con un boxplot.
 ```{r, fig.cap="Vemos que el sueldo por jornal de las personas zafrales se comprende entre menos de 1000$, y varios outliers."}
-datos %>% filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))
+
+datos %>% 
+  filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% 
+  summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% 
+  ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))
 ```
 
 Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.
 ```{r,fig.cap="Observamos clara relacion lineal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración."}
+
 gf<-datos %>%
   filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
-  ggplot(aes(y=pz_2,x=pz_3))+geom_point()+
+  ggplot(aes(y=pz_2,x=pz_3))+
+  geom_point()+
   geom_smooth(formula= y ~ x,method ='lm',color='red',fill='yellow')+
-  scale_y_log10()+scale_x_log10()
+  scale_y_log10()+
+  scale_x_log10()
+
 ggplotly(gf)
 ```
 
