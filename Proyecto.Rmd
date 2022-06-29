@@ -3,9 +3,8 @@ title: "Proyecto"
 author: ''
 date: '2022-06-14'
 output:
-  html_document:
-    df_print: paged
   pdf_document: default
+always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
@@ -362,8 +361,22 @@ ggplotly(gf)
 
 
 ```{r}
+datos %>% 
+  select(dpto)
+
 data <- datos %>%
   select("dpto","est")
+
+data <- data %>% 
+  mutate(est = ifelse(est == "1", 50, est)) %>% 
+  mutate(est = ifelse(est == "2", 125, est)) %>% 
+  mutate(est = ifelse(est == "3", 225, est)) %>% 
+  mutate(est = ifelse(est == "4", 450, est)) %>% 
+  mutate(est = ifelse(est == "5", 800, est)) %>% 
+  mutate(est = ifelse(est == "6", 1500, est)) %>% 
+  mutate(est = ifelse(est == "7", 2750, est)) %>% 
+  mutate(est = ifelse(est == "8", 3500, est))
+
 
 sp_depto <- readOGR(here("Datos","ine_depto.shp"))
 sp_depto <- ggplot2::fortify(sp_depto)
@@ -373,13 +386,17 @@ datos <- right_join(sp_depto, data, by = c("id"="dpto"))
 
 dframe_depto <- ggplot2::fortify(datos)
 
-dframe_depto <- dframe_depto%>%
-  select("id","est","long","lat")
+dato<- dframe_depto %>%
+  group_by(id)%>%
+  summarise(n=n())
 
-dframe_depto%>%
-filter(id!=15) %>%
-ggplot(aes(x = long, y = lat)) +
-geom_polygon()
+datos <- left_join(dframe_depto, dato, by = "id")
+
+datos%>%
+filter(id!=15) %>% 
+ggplot(aes(x = long, y = lat, group = id, fill = n)) +
+geom_polygon() 
+
 
 ```
 
