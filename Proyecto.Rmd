@@ -229,29 +229,82 @@ datos %>%
                                                        '1' = 'Si',
                                                        '2' = 'No'))+ theme_bw()
 ```
+
+
 ```{r}
-aiv_nueva2 <- datos %>% 
-  mutate(aiv3_1 = ifelse(aiv3_1 == "2", 0, aiv3_1)) %>% 
-  mutate(aiv3_2 = ifelse(aiv3_2 == "2", 0, aiv3_2)) %>% 
-  mutate(aiv3_3 = ifelse(aiv3_3 == "2", 0, aiv3_3)) %>% 
-  mutate(aiv3_4 = ifelse(aiv3_4 == "2", 0, aiv3_4)) 
-
-aiv_nueva2 = rowSums(aiv_nueva2[ ,
-                          c("aiv3_1","aiv3_2","aiv3_3","aiv3_4")])
-
-datos<-cbind(datos,aiv_nueva2)
-
 datos %>% 
-  group_by(a9,aiv_nueva2,aiv2_2) %>%
-  filter(a9=="1",aiv_nueva2!="0") %>%
-  summarise(Gasto=sum(aiv2_2),
-            Distinto=n_distinct(aiv_nueva2),
-            Gasto_promedio=Gasto/Distinto) %>% 
-  ggplot(aes(x=factor(aiv_nueva2),y=aiv2_2))+
-  geom_bar(stat="identity")+
-  labs(x="Resultados de nnovación",y="Gasto")
+  group_by(a9,aiv_nueva,bn_3) %>%
+  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
+                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
+                               aiv_nueva %in% c(3,4,5) ~ "3 a 5",
+                               aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+  filter(a9=="1",bn_3!="0") %>% 
+  summarise(n=n()) %>%
+  mutate(freq=n/sum(n)) %>%
+  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(bn_3)))+
+  geom_bar(stat="identity",position = "dodge")+
+  labs(x="Innovación",y="Frecuencia")+
+  scale_fill_brewer(name="Bosques naturales",palette = "Set3",labels = c(
+                                                       '1' = 'Si',
+                                                       '2' = 'No'))+ theme_bw()
+```
+
+
+```{r}
+datos %>% 
+  group_by(a9,aio_nueva,bn_3) %>%
+  mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
+                               aio_nueva %in% c(1,2)  ~ "1 o 2",
+                               aio_nueva %in% c(3,4,5) ~ "3 a 5",
+                               aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+  filter(a9=="1",bn_3!="0") %>% 
+  summarise(n=n()) %>%
+  mutate(freq=n/sum(n)) %>%
+  ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(bn_3)))+
+  geom_bar(stat="identity",position = "dodge")+
+  labs(x="Innovación",y="Frecuencia")+
+  scale_fill_brewer(name="Bosques naturales",palette = "Set3",labels = c(
+                                                       '1' = 'Si',
+                                                       '2' = 'No'))+ theme_bw()
+```
+
+```{r}
+datos %>% 
+  group_by(a9,aiv_nueva,pa_1) %>%
+  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
+                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
+                               aiv_nueva %in% c(3,4,5) ~ "3 a 5",
+                               aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+  filter(a9=="1",pa_1!="0") %>% 
+  summarise(n=n()) %>%
+  mutate(freq=n/sum(n)) %>%
+  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(pa_1)))+
+  geom_bar(stat="identity",position = "dodge")+
+  labs(x="Innovación",y="Frecuencia")+
+  scale_fill_brewer(name="Praderas artificiales",palette = "Set1",labels = c(
+                                                       '1' = 'Si',
+                                                       '2' = 'No'))+ theme_bw()
+```
+
+```{r}
+datos %>% 
+  group_by(a9,aio_nueva,pa_1) %>%
+  mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
+                               aio_nueva %in% c(1,2)  ~ "1 o 2",
+                               aio_nueva %in% c(3,4,5) ~ "3 a 5",
+                               aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+  filter(a9=="1",pa_1!="0") %>% 
+  summarise(n=n()) %>%
+  mutate(freq=n/sum(n)) %>%
+  ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(pa_1)))+
+  geom_bar(stat="identity",position = "dodge")+
+  labs(x="Innovación",y="Frecuencia")+
+  scale_fill_brewer(name="Praderas artificiales",palette = "Set1",labels = c(
+                                                       '1' = 'Si',
+                                                       '2' = 'No'))+ theme_bw()
 
 ```
+
 
 ## Análisis 2
 
@@ -260,9 +313,18 @@ Primero veremos si existen establecimientos con muy poca extension y grandes can
 
 ```{r}
 datos %>% 
-  group_by(b5,b3_7) %>% 
+  group_by(b5,b3_7,est) %>% 
   filter(b5!=0) %>% 
-  summarise(a=b5*b3_7/100)
+  summarise(a=b5*b3_7/100)%>%
+  mutate(a = case_when(a %in% c(0:200)  ~ "0-200",
+                          a %in% c(201:400)  ~ "200-400",
+                          a %in% c(401:600)  ~ "400-600",
+                          a > 600 ~ "600")) %>%
+  filter(a=="0-200",a=="200-400",a=="400-600",a=="600") %>% 
+  ggplot() +
+  geom_mosaic(aes(x = product(a, est), fill= a))+
+  scale_fill_brewer(palette = "Set2")+
+  theme_bw()
 ```
 Para utilizar la superficie se corrigió por la calidad del suelo, llevandola a hectáreas conneat 100 equivalentes de forma tal que sean calidades similares en términos de productividad.
 
@@ -270,13 +332,13 @@ Para utilizar la superficie se corrigió por la calidad del suelo, llevandola a 
 ```{r fig.cap="Unidades Ganaderas segun la extension del territorio"}
 
 datos %>% 
-  group_by(b5,b3_7,est) %>% 
-  mutate(b3_7 = case_when(b3_7 %in% c(1:200)  ~ "0-200",
-                          b3_7 %in% c(201:400)  ~ "200-400",
-                          b3_7 %in% c(401:600)  ~ "400-600",
-                          b3_7 > 600 ~ "600")) %>%
+  group_by(a,est) %>% 
+  mutate(b3_7 = case_when(a %in% c(1:200)  ~ "0-200",
+                          a %in% c(201:400)  ~ "200-400",
+                          a %in% c(401:600)  ~ "400-600",
+                          a > 600 ~ "600")) %>%
   ggplot() +
-  geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))+
+  geom_mosaic(aes(x = product(a, est), fill= a))+
   scale_fill_brewer(palette = "Set2")+
   labs(x="Estrato de tamaño",y="Tenencia de la tierra",fill="Tenencia de la tierra")+
   theme_bw()
