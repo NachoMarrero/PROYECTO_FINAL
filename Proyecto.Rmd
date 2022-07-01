@@ -3,8 +3,10 @@ title: "Proyecto"
 author: ''
 date: '2022-06-14'
 output:
+  html_document:
+    df_print: paged
   pdf_document: default
-always_allow_html: true
+always_allow_html: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -311,7 +313,7 @@ datos %>%
 En esta parte del análisis veremos características de las explotaciones.
 Primero veremos si existen establecimientos con muy poca extension y grandes cantidades de unidades ganaderas, observamos que hay muy pocos productores con mas de cinco unidades ganaderas que tengan superficies de menos de 600 hectáreas, también notamos que hay una gran distrubución del estrato que poseen para todos los encuestados, hay similiar cantidad de grandes productores como de pequeños.
 
-```{r}
+```{r,eval=FALSE}
 datos %>% 
   group_by(b5,b3_7,est) %>% 
   filter(b5!=0) %>% 
@@ -329,7 +331,7 @@ datos %>%
 Para utilizar la superficie se corrigió por la calidad del suelo, llevandola a hectáreas conneat 100 equivalentes de forma tal que sean calidades similares en términos de productividad.
 
 
-```{r fig.cap="Unidades Ganaderas segun la extension del territorio"}
+```{r fig.cap="Unidades Ganaderas segun la extension del territorio",eval=FALSE}
 
 datos %>% 
   group_by(a,est) %>% 
