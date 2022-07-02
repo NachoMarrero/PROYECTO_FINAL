@@ -16,6 +16,34 @@ library(shinydashboard)
 
 datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
 
+aiv_nueva <- datos %>% 
+  mutate(aiv_1 = ifelse(aiv_1 == "2", 0, aiv_1)) %>% 
+  mutate(aiv_2 = ifelse(aiv_2 == "2", 0, aiv_2)) %>% 
+  mutate(aiv_3 = ifelse(aiv_3 == "2", 0, aiv_3)) %>% 
+  mutate(aiv_4 = ifelse(aiv_4 == "2", 0, aiv_4)) %>% 
+  mutate(aiv_5 = ifelse(aiv_5 == "2", 0, aiv_5)) %>% 
+  mutate(aiv_6 = ifelse(aiv_6 == "2", 0, aiv_6)) %>% 
+  mutate(aiv_7 = ifelse(aiv_7 == "2", 0, aiv_7)) %>% 
+  mutate(aiv_8 = ifelse(aiv_8 == "2", 0, aiv_8))
+
+aiv_nueva = rowSums(aiv_nueva[ ,c("aiv_1","aiv_2","aiv_3","aiv_4","aiv_5","aiv_6","aiv_7","aiv_8")])
+
+datos<-cbind(datos,aiv_nueva)
+
+aio_nueva <- datos %>% 
+  mutate(aio_1 = ifelse(aio_1 == "2", 0, aio_1)) %>% 
+  mutate(aio_2 = ifelse(aio_2 == "2", 0, aio_2)) %>% 
+  mutate(aio_3 = ifelse(aio_3 == "2", 0, aio_3)) %>% 
+  mutate(aio_4 = ifelse(aio_4 == "2", 0, aio_4)) %>% 
+  mutate(aio_5 = ifelse(aio_5 == "2", 0, aio_5)) %>% 
+  mutate(aio_6 = ifelse(aio_6 == "2", 0, aio_6)) %>% 
+  mutate(aio_7 = ifelse(aio_7 == "2", 0, aio_7)) %>% 
+  mutate(aio_8 = ifelse(aio_8 == "2", 0, aio_8))
+
+aio_nueva = rowSums(aio_nueva[ ,c("aio_1","aio_2","aio_3","aio_4","aio_5","aio_6","aio_7","aio_8")])
+
+datos<-cbind(datos,aio_nueva)
+
 ui <- fluidPage(
   theme= bs_theme(version = 4, bootswatch = "minty"),
   titlePanel("Datos de Ministerio de Ganadería, Agricultura y Pesca del Uruguay"),
@@ -116,21 +144,10 @@ server <- function(input, output){
       
     }
   })
+  
   output$scat<- renderPlot({
     if(input$vor=='aiv_nueva'){
-      aiv_nueva <- datos %>% 
-        mutate(aiv_1 = ifelse(aiv_1 == "2", 0, aiv_1)) %>% 
-        mutate(aiv_2 = ifelse(aiv_2 == "2", 0, aiv_2)) %>% 
-        mutate(aiv_3 = ifelse(aiv_3 == "2", 0, aiv_3)) %>% 
-        mutate(aiv_4 = ifelse(aiv_4 == "2", 0, aiv_4)) %>% 
-        mutate(aiv_5 = ifelse(aiv_5 == "2", 0, aiv_5)) %>% 
-        mutate(aiv_6 = ifelse(aiv_6 == "2", 0, aiv_6)) %>% 
-        mutate(aiv_7 = ifelse(aiv_7 == "2", 0, aiv_7)) %>% 
-        mutate(aiv_8 = ifelse(aiv_8 == "2", 0, aiv_8))
-      
-      aiv_nueva = rowSums(aiv_nueva[ ,c("aiv_1","aiv_2","aiv_3","aiv_4","aiv_5","aiv_6","aiv_7","aiv_8")])
-      
-      datos<-cbind(datos,aiv_nueva)
+      if(input$var=='a12'){ 
       datos %>% 
         group_by(a9,aiv_nueva,a12) %>% 
         mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
@@ -148,7 +165,8 @@ server <- function(input, output){
         geom_bar(stat="identity")+
         labs(x="Innovación",y="Frecuencia")+
         scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
-    }else{
+        }else{
+          if(input$var=='prof_1'){ 
       datos %>% 
         group_by(a9,aiv_nueva,prof_1) %>%
         mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
@@ -180,75 +198,65 @@ server <- function(input, output){
         scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
           '1' = 'Si',
           '2' = 'No'))+ theme_bw()
-      }else{
-        if(input$vor=='aio_nueva'){
-        aio_nueva <- datos %>% 
-          mutate(aio_1 = ifelse(aio_1 == "2", 0, aio_1)) %>% 
-          mutate(aio_2 = ifelse(aio_2 == "2", 0, aio_2)) %>% 
-          mutate(aio_3 = ifelse(aio_3 == "2", 0, aio_3)) %>% 
-          mutate(aio_4 = ifelse(aio_4 == "2", 0, aio_4)) %>% 
-          mutate(aio_5 = ifelse(aio_5 == "2", 0, aio_5)) %>% 
-          mutate(aio_6 = ifelse(aio_6 == "2", 0, aio_6)) %>% 
-          mutate(aio_7 = ifelse(aio_7 == "2", 0, aio_7)) %>% 
-          mutate(aio_8 = ifelse(aio_8 == "2", 0, aio_8))
-        
-        aio_nueva = rowSums(aio_nueva[ ,c("aio_1","aio_2","aio_3","aio_4","aio_5","aio_6","aio_7","aio_8")])
-        
-        datos<-cbind(datos,aio_nueva)
-        
-        datos %>% 
-          group_by(a9,aio_nueva,a12) %>% 
-          mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
-                                 a12 %in% c(3,4) ~ "Secundaria",
-                                 a12 %in% c(5,6) ~ "Técnico univeritario")) %>% 
-          filter(a12!="Otros") %>% 
-          mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
-                                       aio_nueva %in% c(1,2)  ~ "1 o 2",
-                                       aio_nueva %in% c(3,4,5) ~ "3 a 5",
-                                       aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-          filter(a9=="1",a12!="0") %>% 
-          summarise(n=n() ) %>%
-          mutate(freq=n/sum(n)) %>%
-          ggplot(aes(x=factor(aio_nueva),y=freq,fill=.data[[input$var]]))+
-          geom_bar(stat="identity")+
-          labs(x="Innovación",y="Frecuencia")+
-          scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
-        
-      }else{
-        datos %>% 
-          group_by(a9,aio_nueva,prof_1) %>%
-          mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
-                                       aio_nueva %in% c(1,2)  ~ "1 o 2",
-                                       aio_nueva %in% c(3,4,5) ~ "3 a 5",
-                                       aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-          filter(a9=="1",prof_1!="0") %>% 
-          summarise(n=n()) %>%
-          mutate(freq=n/sum(n)) %>%
-          ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(.data[[input$var]])))+
-          geom_bar(stat="identity",position = "dodge")+
-          labs(x="Innovación",y="Frecuencia")+
-          scale_fill_brewer(name="Personal profesional",palette = "Accent",labels = c(
-            '1' = 'Si',
-            '2' = 'No'))+ 
-          theme_bw()
-      }else{
-        datos %>% 
-          group_by(a9,aio_nueva,ba_1) %>%
-          mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
-                                       aio_nueva %in% c(1,2)  ~ "1 o 2",
-                                       aio_nueva %in% c(3,4,5) ~ "3 a 5",
-                                       aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-          filter(a9=="1",ba_1!="0") %>% 
-          summarise(n=n()) %>%
-          mutate(freq=n/sum(n)) %>%
-          ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(.data[[input$var]])))+
-          geom_bar(stat="identity",position = "dodge")+
-          labs(x="Innovación",y="Frecuencia")+
-          scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
-            '1' = 'Si',
-            '2' = 'No'))+ theme_bw()
       }
-    }
+     }
+    }else{
+      if(input$vor=='aio_nueva'){
+        if(input$var=='a12'){ 
+          datos %>% 
+            group_by(a9,aio_nueva,a12) %>% 
+            mutate(a12 = case_when(a12 %in% c(0,1,2)  ~ "Básico",
+                                   a12 %in% c(3,4) ~ "Secundaria",
+                                   a12 %in% c(5,6) ~ "Técnico univeritario")) %>% 
+            filter(a12!="Otros") %>% 
+            mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
+                                         aio_nueva %in% c(1,2)  ~ "1 o 2",
+                                         aio_nueva %in% c(3,4,5) ~ "3 a 5",
+                                         aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+            filter(a9=="1",a12!="0") %>% 
+            summarise(n=n() ) %>%
+            mutate(freq=n/sum(n)) %>%
+            ggplot(aes(x=factor(aio_nueva),y=freq,fill=.data[[input$var]]))+
+            geom_bar(stat="identity")+
+            labs(x="Innovación",y="Frecuencia")+
+            scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
+        }else{
+          if(input$var=='prof_1'){ 
+            datos %>% 
+              group_by(a9,aio_nueva,prof_1) %>%
+              mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
+                                           aio_nueva %in% c(1,2)  ~ "1 o 2",
+                                           aio_nueva %in% c(3,4,5) ~ "3 a 5",
+                                           aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+              filter(a9=="1",prof_1!="0") %>% 
+              summarise(n=n()) %>%
+              mutate(freq=n/sum(n)) %>%
+              ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(.data[[input$var]])))+
+              geom_bar(stat="identity",position = "dodge")+
+              labs(x="Innovación",y="Frecuencia")+
+              scale_fill_brewer(name="Personal profesional",palette = "Accent",labels = c(
+                '1' = 'Si',
+                '2' = 'No'))+ theme_bw()
+          }else{
+            datos %>% 
+              group_by(a9,aio_nueva,ba_1) %>%
+              mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
+                                           aio_nueva %in% c(1,2)  ~ "1 o 2",
+                                           aio_nueva %in% c(3,4,5) ~ "3 a 5",
+                                           aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+              filter(a9=="1",ba_1!="0") %>% 
+              summarise(n=n()) %>%
+              mutate(freq=n/sum(n)) %>%
+              ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(.data[[input$var]])))+
+              geom_bar(stat="identity",position = "dodge")+
+              labs(x="Innovación",y="Frecuencia")+
+              scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
+                '1' = 'Si',
+                '2' = 'No'))+ theme_bw()
+          }
+        }
+      }
+     }
   })
 }
 shinyApp(ui, server)
