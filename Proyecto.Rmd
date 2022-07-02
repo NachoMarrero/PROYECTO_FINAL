@@ -235,37 +235,52 @@ datos %>%
 
 ```{r}
 datos %>% 
-  group_by(a9,aiv_nueva,bn_3) %>%
+  group_by(a9,aiv_nueva,ba_1) %>%
   mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
                                aiv_nueva %in% c(1,2)  ~ "1 o 2",
                                aiv_nueva %in% c(3,4,5) ~ "3 a 5",
                                aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-  filter(a9=="1",bn_3!="0") %>% 
+  filter(a9=="1",ba_1!="0") %>% 
   summarise(n=n()) %>%
   mutate(freq=n/sum(n)) %>%
-  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(bn_3)))+
+  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(ba_1)))+
   geom_bar(stat="identity",position = "dodge")+
   labs(x="Innovación",y="Frecuencia")+
-  scale_fill_brewer(name="Bosques naturales",palette = "Set3",labels = c(
+  scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
                                                        '1' = 'Si',
                                                        '2' = 'No'))+ theme_bw()
+
+
+
+
+datos %>% 
+  group_by(a9,aiv_nueva,ba_1) %>%
+  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
+                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
+                               aiv_nueva %in% c(3,4,5) ~ "3 a 5",
+                               aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+  filter(a9=="1",ba_1!="0") %>%
+  ggplot() +
+  geom_mosaic(aes(x = product(ba_1, aiv_nueva), fill= ba_1))+
+  scale_fill_brewer(palette = "Set3")+
+  theme_bw()
 ```
 
 
 ```{r}
 datos %>% 
-  group_by(a9,aio_nueva,bn_3) %>%
+  group_by(a9,aio_nueva,ba_1) %>%
   mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
                                aio_nueva %in% c(1,2)  ~ "1 o 2",
                                aio_nueva %in% c(3,4,5) ~ "3 a 5",
                                aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-  filter(a9=="1",bn_3!="0") %>% 
+  filter(a9=="1",ba_1!="0") %>% 
   summarise(n=n()) %>%
   mutate(freq=n/sum(n)) %>%
-  ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(bn_3)))+
+  ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(ba_1)))+
   geom_bar(stat="identity",position = "dodge")+
   labs(x="Innovación",y="Frecuencia")+
-  scale_fill_brewer(name="Bosques naturales",palette = "Set3",labels = c(
+  scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
                                                        '1' = 'Si',
                                                        '2' = 'No'))+ theme_bw()
 ```
@@ -322,7 +337,6 @@ datos %>%
                           a %in% c(201:400)  ~ "200-400",
                           a %in% c(401:600)  ~ "400-600",
                           a > 600 ~ "600")) %>%
-  filter(a=="0-200",a=="200-400",a=="400-600",a=="600") %>% 
   ggplot() +
   geom_mosaic(aes(x = product(a, est), fill= a))+
   scale_fill_brewer(palette = "Set2")+
