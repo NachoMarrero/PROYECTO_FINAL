@@ -424,8 +424,8 @@ datos %>%
          coord_flip()
 ```
 
-Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.
-```{r,fig.cap="Observamos clara relacion lineal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración."}
+Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.Observamos clara relacion lineal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración
+```{r,fig.cap=""}
 
 gf<-datos %>%
   filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
@@ -474,11 +474,13 @@ datos <- right_join(sp_depto, data, by = c("id"="dpto"))
 
 dframe_depto <- ggplot2::fortify(datos)
 
+datos <- left_join(dframe_depto, dato, by = "id")
+
 dato<- dframe_depto %>%
   group_by(id)%>%
   summarise(n=n())
 
-datos <- left_join(dframe_depto, dato, by = "id")
+
 
 datos%>%
 filter(id!=15) %>% 
