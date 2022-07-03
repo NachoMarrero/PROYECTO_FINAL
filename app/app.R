@@ -13,6 +13,8 @@ library(shinythemes)
 #install.packages('bslib')
 library(bslib)
 library(shinydashboard)
+library(shinyWidgets)
+
 
 datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
 
@@ -45,8 +47,13 @@ aio_nueva = rowSums(aio_nueva[ ,c("aio_1","aio_2","aio_3","aio_4","aio_5","aio_6
 datos<-cbind(datos,aio_nueva)
 
 ui <- fluidPage(
+  setBackgroundColor(color = c("#F0F8FF"),
+                     gradient = "radial",
+                     direction = c("top", "left")
+  ),
   theme= bs_theme(version = 4, bootswatch = "minty"),
-  titlePanel("Datos de Ministerio de Ganadería, Agricultura y Pesca del Uruguay"),
+  titlePanel(div("Encuesta Ganadera Nacional 2016", 
+                 img(height = 105, width = 300, src = "2020-03-13-123013.043508Logo-MGAP---Horizontal-fondo-transparente.png"))),
   navbarPage("Grupo 2",
              tabPanel(icon("home"),
                       fluidRow(column(tags$img(src="imag1.jpg",width="200px",height="260px"),width=2),
@@ -63,12 +70,15 @@ ui <- fluidPage(
                                  p("Los integrantes son nacho victoria y angel",
                                    em(" ")),
                                  width=8))),
-             tabPanel("Analisis de los productores",
-                      plotOutput("scat"),
+             tabPanel("Innovación de los productores",
+               sidebarLayout(
+                 sidebarPanel(style = "background-color: LightBlue;",
                       selectInput('vor','Variable',c('Bovinos'='aiv_nueva','Ovinos'='aio_nueva')),
                       selectInput('var','Colorear por',c('Nivel de enseñanza'='a12',
                                                          'Personal profesional'='prof_1',
                                                          'Bosques artificiales'='ba_1'))),
+                 mainPanel(h2("", align = "center"),
+                           plotOutput("scat")))),
              tabPanel("Analisis general",
                       selectInput('grafico','Que grafico le interesa?',
                                   c('mosaico','barras','boxplot','boxplot2')),
@@ -164,7 +174,10 @@ server <- function(input, output){
         ggplot(aes(x=factor(aiv_nueva),y=freq,fill=.data[[input$var]]))+
         geom_bar(stat="identity")+
         labs(x="Innovación",y="Frecuencia")+
-        scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
+        scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme(
+          plot.background = element_rect(fill = "#F0F8FF"), 
+          panel.background = element_rect(fill = "#F0F8FF", colour="black")
+        )
         }else{
           if(input$var=='prof_1'){ 
       datos %>% 
@@ -181,7 +194,10 @@ server <- function(input, output){
         labs(x="Innovación",y="Frecuencia")+
         scale_fill_brewer(name="Personal profesional",palette = "Accent",labels = c(
           '1' = 'Si',
-          '2' = 'No'))+ theme_bw()
+          '2' = 'No'))+ theme(
+            plot.background = element_rect(fill = "#F0F8FF"), 
+            panel.background = element_rect(fill = "#F0F8FF", colour="black")
+          )
     }else{
       datos %>% 
         group_by(a9,aiv_nueva,ba_1) %>%
@@ -197,7 +213,10 @@ server <- function(input, output){
         labs(x="Innovación",y="Frecuencia")+
         scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
           '1' = 'Si',
-          '2' = 'No'))+ theme_bw()
+          '2' = 'No'))+ theme(
+            plot.background = element_rect(fill = "#F0F8FF"), 
+            panel.background = element_rect(fill = "#F0F8FF", colour="black")
+          )
       }
      }
     }else{
@@ -219,7 +238,10 @@ server <- function(input, output){
             ggplot(aes(x=factor(aio_nueva),y=freq,fill=.data[[input$var]]))+
             geom_bar(stat="identity")+
             labs(x="Innovación",y="Frecuencia")+
-            scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
+            scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme(
+              plot.background = element_rect(fill = "#F0F8FF"), 
+              panel.background = element_rect(fill = "#F0F8FF", colour="black")
+            )
         }else{
           if(input$var=='prof_1'){ 
             datos %>% 
@@ -236,7 +258,10 @@ server <- function(input, output){
               labs(x="Innovación",y="Frecuencia")+
               scale_fill_brewer(name="Personal profesional",palette = "Accent",labels = c(
                 '1' = 'Si',
-                '2' = 'No'))+ theme_bw()
+                '2' = 'No'))+ theme(
+                  plot.background = element_rect(fill = "#F0F8FF"), 
+                  panel.background = element_rect(fill = "#F0F8FF", colour="black")
+                )
           }else{
             datos %>% 
               group_by(a9,aio_nueva,ba_1) %>%
@@ -252,7 +277,10 @@ server <- function(input, output){
               labs(x="Innovación",y="Frecuencia")+
               scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
                 '1' = 'Si',
-                '2' = 'No'))+ theme_bw()
+                '2' = 'No'))+ theme(
+                  plot.background = element_rect(fill = "#F0F8FF"), 
+                  panel.background = element_rect(fill = "#F0F8FF", colour="black")
+                )
           }
         }
       }
