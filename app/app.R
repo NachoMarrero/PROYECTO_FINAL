@@ -75,7 +75,7 @@ ui <- fluidPage(
                sidebarLayout(
                  sidebarPanel(style = "background-color: LightBlue;",
                       selectInput('vor','Variable',c('Bovinos'='aiv_nueva','Ovinos'='aio_nueva')),
-                      selectInput('var','Colorear por',c('Nivel de enseñanza'='a12',
+                      selectInput('var','Colorear por',c('Nivel educativo'='a12',
                                                          'Personal profesional'='prof_1',
                                                          'Bosques artificiales'='ba_1'))),
                  mainPanel(h2("", align = "center"),
