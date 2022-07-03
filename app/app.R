@@ -47,16 +47,13 @@ aio_nueva = rowSums(aio_nueva[ ,c("aio_1","aio_2","aio_3","aio_4","aio_5","aio_6
 datos<-cbind(datos,aio_nueva)
 
 ui <- fluidPage(
-  setBackgroundColor(color = c("#F0F8FF"),
-                     gradient = "radial",
-                     direction = c("top", "left")
-  ),
+  setBackgroundColor(color = c("#F0F8FF")),
   theme= bs_theme(version = 4, bootswatch = "minty"),
   titlePanel(div("Encuesta Ganadera Nacional 2016", 
                  img(height = 105, width = 300, src = "2020-03-13-123013.043508Logo-MGAP---Horizontal-fondo-transparente.png"))),
   navbarPage("Grupo 2",
              tabPanel(icon("home"),
-                      fluidRow(column(tags$img(src="imag1.jpg",width="260px",height="260px"),width=2),
+                      fluidRow(column(tags$img(src="imag1.jpg",width="100%",height="100%"),width=2),
                                column(
                                  br(),
                                  p(" ", 
@@ -84,9 +81,12 @@ ui <- fluidPage(
                  mainPanel(h2("", align = "center"),
                            plotOutput("scat")))),
              tabPanel("Analisis del personal contratado",
-                      selectInput('grafico','Que grafico le interesa?',
-                                  c('mosaico','barras','boxplot','puntos')),
-                      plotOutput("barplot"))))
+                      sidebarLayout(
+                        sidebarPanel(style = "background-color: LightBlue;",
+                                     selectInput('grafico','Que grafico le interesa?',
+                                                  c('mosaico','barras','boxplot','puntos'))),
+                        mainPanel(h2("", align = "center"),
+                        plotOutput("barplot"))))))
 
 server <- function(input, output){
   output$barplot<- renderPlot({
@@ -103,8 +103,9 @@ server <- function(input, output){
         ggplot() +
         geom_mosaic(aes(x = product(a, est), fill= a))+
         scale_fill_brewer(palette = "Set2")+
-        theme_bw()+
-        theme(aspect.ratio=1)
+        theme(aspect.ratio=1)+
+        theme(plot.background = element_rect(fill = "#F0F8FF"), 
+              panel.background = element_rect(fill = "#F0F8FF", colour="black"))
     }else{
       if(input$grafico=='barras'){
         Cant_CJ<- datos %>%
@@ -135,8 +136,8 @@ server <- function(input, output){
           theme(legend.position = 'none')+
           scale_y_continuous()+
           labs(y='Porcentaje Personal zafral',x='')+
-          scale_y_continuous(breaks = c(20,40,60,80))+
-          theme(aspect.ratio=1)
+          scale_y_continuous(breaks = c(20,40,60,80))+ theme(plot.background = element_rect(fill = "#F0F8FF"), 
+                                                             panel.background = element_rect(fill = "#F0F8FF", colour="black"))
       }else{
          datos %>% 
            filter(pz_1==1,pz_2>0,pz_3>0) %>% 
@@ -147,7 +148,9 @@ server <- function(input, output){
            scale_x_discrete(name='')+
            labs(y="Renumeración/Jornal",fill='Condicion Juridica')+#theme(legend.position='bottom')+
            scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
-          theme(aspect.ratio=1)
+          theme(aspect.ratio=1)+
+          theme(plot.background = element_rect(fill = "#F0F8FF"), 
+                                     panel.background = element_rect(fill = "#F0F8FF", colour="black"))
       }
     }
 })
@@ -295,7 +298,9 @@ server <- function(input, output){
                                     'Mayor a 81'))+
         scale_fill_brewer(name="Sexo",palette="Accent",labels=c('1'='M',
                                                                 '2'='F'))+
-        theme_bw()+theme(aspect.ratio=1)
+        theme(plot.background = element_rect(fill = "#F0F8FF"), 
+              panel.background = element_rect(fill = "#F0F8FF", colour="black"))+
+        theme(aspect.ratio=1)
     }else{
       datos %>% 
         group_by(a9) %>% 
@@ -307,7 +312,8 @@ server <- function(input, output){
           '2' = 'Sociedad sin contrato',
           '3' = 'Sociedad con \n contrato legal',
           '4' = 'Otra'),palette="Accent") +
-        theme_bw()+
+        theme(plot.background = element_rect(fill = "#F0F8FF"), 
+                                                 panel.background = element_rect(fill = "#F0F8FF", colour="black"))+
         theme(legend.position='none',aspect.ratio=1)
     }
   })
