@@ -367,36 +367,35 @@ A continuación observaremos la proporción de encuestados que contratan persona
 ```{r,fig.cap="Diagrama de barras Se observa que mayor proporcion de los encuestados contratan personal profesional que zafral. A pesar de esto, no hay diferencias de proporción segun su Condición Jurídica."}
 
 Cant_CJ<- datos %>%
-  group_by(a9) %>% summarise(Cant=n())
-
-Cant_Z<-datos %>% 
-  filter(pz_1==1,pz_2>0,pz_3>0) %>% 
-  group_by(a9) %>% 
-  summarise(Cant_z=n())
-
-Cant_PP<- datos %>% 
-  filter(prof_1==1,prof1==1|prof2==1|prof3==1|prof4==1|prof5==1|prof6==1|prof7==1|prof8==1) %>%
-  group_by(a9) %>% 
-  summarise(Cant_pp=n())
-
-tabla_porcentaje<- inner_join(inner_join(Cant_CJ, Cant_Z, by = "a9"),Cant_PP,by="a9") %>%
-  mutate(Porc_PP=Cant_pp/Cant) %>%
-  mutate(Porc_Z=Cant_z/Cant)
-
-ggplot(tabla_porcentaje)+
-  geom_col(aes(y=Porc_PP*100,x=a9,fill=factor(a9)))+
-  geom_text(aes(x=a9,y=Porc_PP*100,label=round(Porc_PP*100)),vjust=2)+
-  theme(legend.position = 'none')+
-  scale_y_continuous()+
-  labs(y='Porcentaje Personal Profesional')+
-  scale_y_continuous(breaks = c(20,40,60,80))+
-ggplot(tabla_porcentaje)+
-  geom_col(aes(x=a9,y=Porc_Z*100,fill=factor(a9)))+
-  geom_text(aes(x=a9,y=Porc_Z*100,label=round(Porc_Z*100)),vjust=2)+
-  theme(legend.position = 'none')+
-  scale_y_continuous()+
-  labs(y='Porcentaje Personal zafral')+
-  scale_y_continuous(breaks = c(20,40,60,80))  
+          group_by(a9) %>% summarise(Cant=n())
+        Cant_Z<-datos %>% 
+          filter(pz_1==1,pz_2>0,pz_3>0) %>% 
+          group_by(a9) %>% 
+          summarise(Cant_z=n())
+        Cant_PP<- datos %>% 
+          filter(prof_1==1,prof1==1|prof2==1|prof3==1|prof4==1|prof5==1|prof6==1|prof7==1|prof8==1) %>%
+          group_by(a9) %>% 
+          summarise(Cant_pp=n())
+        tabla_porcentaje<- inner_join(inner_join(Cant_CJ, Cant_Z, by = "a9"),Cant_PP,by="a9") %>%
+          mutate(Porc_PP=Cant_pp/Cant) %>%
+          mutate(Porc_Z=Cant_z/Cant)
+        ggplot(tabla_porcentaje)+
+          geom_col(aes(y=Porc_PP*100,x=a9,fill=factor(a9)))+
+          geom_text(aes(x=a9,y=Porc_PP*100,label=round(Porc_PP*100)),vjust=2)+
+          theme(legend.position = 'right')+
+          scale_y_continuous()+
+          scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
+          labs(y='Porcentaje Personal Profesional',fill='',x='')+
+          scale_y_continuous(breaks = c(20,40,60,80))+
+          theme(aspect.ratio=1)
+          ggplot(tabla_porcentaje)+
+          geom_col(aes(x=a9,y=Porc_Z*100,fill=factor(a9)))+
+          geom_text(aes(x=a9,y=Porc_Z*100,label=round(Porc_Z*100)),vjust=2)+
+          theme(legend.position = 'none')+
+          scale_y_continuous()+
+          labs(y='Porcentaje Personal zafral',x='')+
+          scale_y_continuous(breaks = c(20,40,60,80))+
+          theme(aspect.ratio=1)
 ```
 
 Por otra parte, nos interesó averiguar si podiamos encontrar alguna diferencia sobre la renumeración por jornal que perciben los contratados para zafra, agrupando por la Condición Jurídica.
@@ -409,8 +408,10 @@ datos %>%
   ggplot()+geom_boxplot(aes(y=pz_3/pz_2,fill=factor(a9)))+
   scale_y_log10()+
   facet_grid(~a9)+
-  scale_x_discrete(name='Condicion Juridica')+
-  labs(y="Renumeración/Jornal")
+  scale_x_discrete(name='')+
+           labs(y="Renumeración/Jornal",fill='Condicion Juridica')+#theme(legend.position='bottom')+
+           scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
+          theme(aspect.ratio=1)
 ```
 Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente el sueldo por jornal con un boxplot.
 ```{r, fig.cap="Vemos que el sueldo por jornal de las personas zafrales se comprende entre menos de 1000$, y varios outliers."}
@@ -418,7 +419,7 @@ Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayor
 datos %>% 
   filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% 
   summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% 
-  ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))
+  ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))+labs(y='Sueldo por jornal')
 ```
 
 Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.
@@ -428,9 +429,10 @@ gf<-datos %>%
   filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
   ggplot(aes(y=pz_2,x=pz_3))+
   geom_point()+
-  geom_smooth(formula= y ~ x,method ='lm',color='red',fill='yellow')+
+  geom_smooth(formula= y ~ x,method ='lm',color='red',fill='blue')+
   scale_y_log10()+
-  scale_x_log10()
+  scale_x_log10()+
+  labs(x='Renumeracion',y='Jornales')
 
 ggplotly(gf)
 ```

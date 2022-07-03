@@ -56,7 +56,7 @@ ui <- fluidPage(
                  img(height = 105, width = 300, src = "2020-03-13-123013.043508Logo-MGAP---Horizontal-fondo-transparente.png"))),
   navbarPage("Grupo 2",
              tabPanel(icon("home"),
-                      fluidRow(column(tags$img(src="imag1.jpg",width="200px",height="260px"),width=2),
+                      fluidRow(column(tags$img(src="imag1.jpg",width="260px",height="260px"),width=2),
                                column(
                                  br(),
                                  p(" ", 
@@ -67,9 +67,13 @@ ui <- fluidPage(
                                  y no serán conclusiones que se puedan extender al conjunto de los
                                  productores ganaderos.")),
                                  br(),
-                                 p("Los integrantes son nacho victoria y angel",
+                                 p("Los integrantes son Victoria Fernandez, Angel Nuñez e Ignacio Marrero.",
                                    em(" ")),
                                  width=8))),
+             tabPanel("Datos de los encuestados",
+                      selectInput('ver','Variable',
+                                  c('Rango de edad'='cut(a11, breaks = 5,labes=FALSE)','Condicion juridica'='a9')),
+                      plotOutput('encuestados')),
              tabPanel("Innovación de los productores",
                sidebarLayout(
                  sidebarPanel(style = "background-color: LightBlue;",
@@ -79,9 +83,9 @@ ui <- fluidPage(
                                                          'Bosques artificiales'='ba_1'))),
                  mainPanel(h2("", align = "center"),
                            plotOutput("scat")))),
-             tabPanel("Analisis general",
+             tabPanel("Analisis del personal contratado",
                       selectInput('grafico','Que grafico le interesa?',
-                                  c('mosaico','barras','boxplot','boxplot2')),
+                                  c('mosaico','barras','boxplot','puntos')),
                       plotOutput("barplot"))))
 
 server <- function(input, output){
@@ -95,66 +99,58 @@ server <- function(input, output){
                              a %in% c(201:400)  ~ "200-400",
                              a %in% c(401:600)  ~ "400-600",
                              a > 600 ~ "600")) %>%
-        filter(a=="0-200",a=="200-400",a=="400-600",a=="600") %>% 
+        #filter(a=="0-200",a=="200-400",a=="400-600",a=="600") %>% 
         ggplot() +
         geom_mosaic(aes(x = product(a, est), fill= a))+
         scale_fill_brewer(palette = "Set2")+
-        theme_bw()
+        theme_bw()+
+        theme(aspect.ratio=1)
     }else{
       if(input$grafico=='barras'){
         Cant_CJ<- datos %>%
           group_by(a9) %>% summarise(Cant=n())
-        
         Cant_Z<-datos %>% 
           filter(pz_1==1,pz_2>0,pz_3>0) %>% 
           group_by(a9) %>% 
           summarise(Cant_z=n())
-        
         Cant_PP<- datos %>% 
           filter(prof_1==1,prof1==1|prof2==1|prof3==1|prof4==1|prof5==1|prof6==1|prof7==1|prof8==1) %>%
           group_by(a9) %>% 
           summarise(Cant_pp=n())
-        
         tabla_porcentaje<- inner_join(inner_join(Cant_CJ, Cant_Z, by = "a9"),Cant_PP,by="a9") %>%
           mutate(Porc_PP=Cant_pp/Cant) %>%
           mutate(Porc_Z=Cant_z/Cant)
-        
         ggplot(tabla_porcentaje)+
           geom_col(aes(y=Porc_PP*100,x=a9,fill=factor(a9)))+
           geom_text(aes(x=a9,y=Porc_PP*100,label=round(Porc_PP*100)),vjust=2)+
-          theme(legend.position = 'none')+
+          theme(legend.position = 'right')+
           scale_y_continuous()+
-          labs(y='Porcentaje Personal Profesional')+
+          scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
+          labs(y='Porcentaje Personal Profesional',fill='',x='')+
           scale_y_continuous(breaks = c(20,40,60,80))+
+          theme(aspect.ratio=1)
           ggplot(tabla_porcentaje)+
           geom_col(aes(x=a9,y=Porc_Z*100,fill=factor(a9)))+
           geom_text(aes(x=a9,y=Porc_Z*100,label=round(Porc_Z*100)),vjust=2)+
           theme(legend.position = 'none')+
           scale_y_continuous()+
-          labs(y='Porcentaje Personal zafral')+
-          scale_y_continuous(breaks = c(20,40,60,80)) 
-      }else
-      {if(input$grafico=='boxplot'){
-        datos %>% 
-          filter(pz_1==1,pz_2>0,pz_3>0) %>% 
-          group_by(a9,a12) %>%
-          ggplot()+geom_boxplot(aes(y=pz_3/pz_2,fill=factor(a9)))+
-          scale_y_log10()+
-          facet_grid(~a9)+
-          scale_x_discrete(name='Condicion Juridica')+
-          labs(y="Renumeración/Jornal")
+          labs(y='Porcentaje Personal zafral',x='')+
+          scale_y_continuous(breaks = c(20,40,60,80))+
+          theme(aspect.ratio=1)
       }else{
-        datos %>% 
-          filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% 
-          summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% 
-          ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))
+         datos %>% 
+           filter(pz_1==1,pz_2>0,pz_3>0) %>% 
+           group_by(a9,a12) %>%
+           ggplot()+geom_boxplot(aes(y=pz_3/pz_2,fill=factor(a9)))+
+           scale_y_log10()+
+           facet_grid(~a9)+
+           scale_x_discrete(name='')+
+           labs(y="Renumeración/Jornal",fill='Condicion Juridica')+#theme(legend.position='bottom')+
+           scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
+          theme(aspect.ratio=1)
       }
-        
-      }
-      
     }
-  })
-  
+})
   output$scat<- renderPlot({
     if(input$vor=='aiv_nueva'){
       if(input$var=='a12'){ 
@@ -285,6 +281,35 @@ server <- function(input, output){
         }
       }
      }
+  })
+  output$encuestados<- renderPlot({
+    if(input$ver=='cut(a11, breaks = 5,labes=FALSE)'){
+      datos %>% 
+        filter(a9!=0,a10!=0,a10>0) %>% 
+        ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(a10)))+
+        geom_bar()+                  
+        labs(x='Rango de edades',y='Cantidad')+
+        scale_x_discrete(name="Rango de edad",
+                         labels = c('Menor a 20','Entre 20 y 40',
+                                    'Entre 41 y 60','Entre 61 y 80',
+                                    'Mayor a 81'))+
+        scale_fill_brewer(name="Sexo",palette="Accent",labels=c('1'='M',
+                                                                '2'='F'))+
+        theme_bw()+theme(aspect.ratio=1)
+    }else{
+      datos %>% 
+        group_by(a9) %>% 
+        ggplot(aes(x=fct_infreq(factor(a9)),fill=factor(a9)))+
+        geom_bar()+
+        labs(y="Cantidad")+
+        scale_x_discrete(name="Condición jurídica",labels = c(
+          '1' = 'Persona física',
+          '2' = 'Sociedad sin contrato',
+          '3' = 'Sociedad con \n contrato legal',
+          '4' = 'Otra'),palette="Accent") +
+        theme_bw()+
+        theme(legend.position='none',aspect.ratio=1)
+    }
   })
 }
 shinyApp(ui, server)
