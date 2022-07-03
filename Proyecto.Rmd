@@ -120,7 +120,7 @@ datos %>%
 ```
 
 
-Continuando con la variable de educación, y manteniendo la reagrupación anterior, investigamos como es la relación entre ésta y las actividades de innovación realizadas en el período (siendo 8 el máximo número posible de distintas innovaciones), en el cual observamos que las personas con mayor nivel educativo son mas propensas a realizar innovaciones. También analizamos la relación entre la contratación de asistencia técnica especializada y las innovacionessi, podemos visualizar como la cantidad de personal profesional contratado es mayor en quienes mas innovaciones realizaron, podriamos deducir que quienes mas innovan tambien poseen mayores niveles de asistencia profesional para dicha actividad.
+Continuando con la variable de educación, y manteniendo la reagrupación anterior, investigamos como es la relación entre ésta y las actividades de innovación realizadas en el período (siendo 8 el máximo número posible de distintas innovaciones), en el cual observamos que las personas con mayor nivel educativo son mas propensas a realizar innovaciones tanto en ovejas como en vacas. 
 
 ```{r}
 aiv_nueva <- datos %>% 
@@ -153,7 +153,7 @@ datos<-cbind(datos,aio_nueva)
 
 ```
 
-```{r, fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones según el nivel educativo del propietario."} 
+```{r, fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en Vacas según el nivel educativo del propietario ."} 
 
 datos %>% 
   group_by(a9,aiv_nueva,a12) %>% 
@@ -174,7 +174,7 @@ datos %>%
   scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
 ```
 
-```{r}
+```{r fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en Vacas según el nivel educativo del propietario"}
 
 datos %>% 
   group_by(a9,aio_nueva,a12) %>% 
@@ -195,6 +195,7 @@ datos %>%
   scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
 
 ```
+También analizamos la relación entre la contratación de asistencia técnica especializada y las innovaciones, podemos visualizar como la cantidad de personal profesional contratado es mayor en quienes mas innovaciones realizaron, podriamos deducir que quienes mas innovan tambien poseen mayores niveles de asistencia profesional para dicha actividad.
 
 ```{r}
 datos %>% 
@@ -413,13 +414,14 @@ datos %>%
            scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
           theme(aspect.ratio=1)
 ```
-Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente el sueldo por jornal con un boxplot.
-```{r, fig.cap="Vemos que el sueldo por jornal de las personas zafrales se comprende entre menos de 1000$, y varios outliers."}
+Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente el sueldo por jornal con un boxplot.Vemos que el sueldo por jornal de las personas zafrales se comprende entre menos de 1000$, y varios outliers
+```{r, fig.cap="Sueldo por jornal trabajado."}
 
 datos %>% 
   filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% 
   summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% 
-  ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))+labs(y='Sueldo por jornal')
+  ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))+labs(y='Sueldo por jornal')+
+         coord_flip()
 ```
 
 Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.
