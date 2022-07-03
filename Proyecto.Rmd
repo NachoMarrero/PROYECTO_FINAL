@@ -457,6 +457,12 @@ data <- data %>%
   mutate(est = ifelse(est == "7", 2750, est)) %>% 
   mutate(est = ifelse(est == "8", 3500, est))
 
+data <- data %>% 
+  mutate(dpto = ifelse(est == "19", 20, dpto)) %>%
+  mutate(dpto = ifelse(est == "18", 19, dpto)) %>% 
+  mutate(dpto = ifelse(est == "17", 18, dpto)) %>% 
+  mutate(dpto = ifelse(est == "16", 17, dpto)) %>% 
+  mutate(dpto = ifelse(est == "15", 16, dpto))
 
 sp_depto <- readOGR(here("Datos","ine_depto.shp"))
 sp_depto <- ggplot2::fortify(sp_depto)
