@@ -3,9 +3,9 @@ title: "Proyecto"
 author: 'Angel Nuñez, Ignacio Marrero y Victoria Fernandez'
 date: '2022-07-04'
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 always_allow_html: yes
 ---
 
@@ -25,12 +25,9 @@ library(patchwork)
 library(plotly)
 
 datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
-
 ```
 
-
 ## Introducción
-
 Este proyecto nace como un instrumento para poder aplicar los contenidos aprendidos durante el semestre en un problema real. Se tendrá que demostrar los conocimentos adquiridos al realizar un análisis exploratorio sobre datos de interés nacional, poniendo especial énfasis en la correcta visualización de los resultados obtenidos, realizando una correcta interpretación de la misma. 
 Se utilizará exclusivamente el lenguaje de programación R, y sus respectivas expansiones, como RMarkdown, Shiny y RStudio.
 
@@ -52,20 +49,24 @@ datos_1 <- data.frame(Variable = c("a11",
                                    "a9",
                                    "a12",
                                    "aiv_nueva",
-                                   "a16_i",
+                                   "aio_nueva",
                                    "dpto",
-                                   "b3_i",
                                    "b3_7",
-                                   "est"),
+                                   "est",
+                                   "prof_1",
+                                   "ba_1",
+                                   "pa_1"),
                       Descripcion = c("Edad",
-                                      "Condición Jurídica",
-                                      "Nivel de Educación",
-                                      "Cantidad innovaciones realizadas en 8 posibles ramas distintas",
-                                      "Tipo de energía utilizada",
+                                      "Condición jurídica",
+                                      "Nivel educativo",
+                                      "Realización de innovaciones en establecimientos con vacunos",
+                                      "Realización de innovaciones en establecimientos con ovinos",
                                       "Departamento donde se ubica la propiedad",
-                                      "Tenencia de Tierras",
-                                      "Total del territorio en ha",
-                                      "Unidades ganaderas en el territorio (1-8)"))
+                                      "Tenencia de la tierra en hectáreas",
+                                      "Estrato de tamaño en unidades ganaderas",
+                                      "Personal profesional",
+                                      "Bosques artificiales",
+                                      "Praderas artificiales"))
 
 
 datos_1 %>% 
@@ -75,7 +76,6 @@ datos_1 %>%
 ```
 
 ## Análisis 1
-
 Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condición jurídica de los propietarios encuestados. Observamos como en su mayoría son personas físicas, lo que habilita la posibilidad de explorar la relación entre las características de las personas que dirigen la explotación y su aptitud innovadora, ya que las características demográficas solo estaban disponibles para este tipo de condición jurídica.
  
 ```{r, fig.cap= "Gráfico de barras sobre la condicion Jurídica de los encuestados"}
@@ -350,31 +350,23 @@ datos %>%
 
 
 ## Análisis 2
-
 En esta parte del análisis veremos características de las explotaciones.
 Primero veremos si existen establecimientos con muy poca extension y grandes cantidades de unidades ganaderas, observamos que hay muy pocos productores con mas de cinco unidades ganaderas que tengan superficies de menos de 600 hectáreas, también notamos que hay una gran distrubución del estrato que poseen para todos los encuestados, hay similiar cantidad de grandes productores como de pequeños.
 
 ```{r}
 datos %>% 
-        group_by(b5,b3_7,est) %>% 
-        filter(b5!=0) %>% 
-        summarise(a=b5*b3_7/100)%>%
-        mutate(a = case_when(a %in% c(0:200)  ~ "0-200",
-                             a %in% c(201:400)  ~ "200-400",
-                             a %in% c(401:600)  ~ "400-600",
-                             a > 600 ~ "600")) %>%
-        #filter(a=="0-200",a=="200-400",a=="400-600",a=="600") %>% 
+        group_by(b3_7,est) %>%
+        mutate(b3_7 = case_when(b3_7 %in% c(0:200)  ~ "0-200",
+                                b3_7 %in% c(201:400)  ~ "200-400",
+                                b3_7 %in% c(401:600)  ~ "400-600",
+                                b3_7 > 600 ~ "600"))  %>% 
         ggplot() +
-        geom_mosaic(aes(x = product(a, est), fill= a))+
-        scale_fill_brewer(name='Cantidad de hectareas',
-                          palette = "Set2")+
-        labs(x='Estrato')+
-        theme(aspect.ratio=1)+
-        theme(plot.background = element_rect(fill = "#F0F8FF"), 
-              panel.background = element_rect(fill = "#F0F8FF", colour="black"))
+        geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))+
+        labs(x="Estrato de tamaño",y="Tenencia de la tierra")+
+        scale_fill_brewer(name= "Tenencia de la tierra",palette = "Set2")+
+        theme_bw()
 ```
 
-Para utilizar la superficie se corrigió por la calidad del suelo, llevandola a hectáreas conneat 100 equivalentes de forma tal que sean calidades similares en términos de productividad.
 
 
 ```{r fig.cap="Unidades Ganaderas segun la extension del territorio",eval=FALSE}
