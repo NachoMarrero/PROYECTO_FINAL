@@ -442,6 +442,7 @@ datos %>%
 ```
 
 Filtrando por quienes contratan persona zafral, queríamos ver si hay alguna relación entre los jornales y su respectiva renumeración.Observamos clara relacion líneal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración
+
 ```{r,fig.cap="Gráfico de puntos sobre la cantidad de jornales y su respectiva renumeración"}
 
 gf<-datos %>%
@@ -455,13 +456,21 @@ gf<-datos %>%
 ggplotly(gf)
 ```
 
+
+
 ## Conclusiones Finales.
 
+Con base en el análisis realizado se llega a algunas conclusiones, que sólo son válidas en el contexto de la muestra seleccionada:
 
+- Los propietarios de las empresas con mayores niveles de educación formal son los más innovadores y también son quienes más contratan personal profesional. A su vez, los propietarios de las empresas que cuentan con bosques o praderas artificiales también son los mas innovadores.
 
-Podemos concluir en base al análisis, que las personas dueñas de los campos con mayores niveles de estudios son quienes mas innvovan, y en relación a eso tambien son quienes mas contratan personal profesional.Esto nos demuestra que dichas personas puede que le dediquen, y/o inviertan mas tiempo y dinero en su produccion.
-Relacionado al territorio observamos como ocurre lo esperado, que a mayor tamaño de territorio mas cantidad de unidades ganaderas a pesar de haber tambien casos en los cuáles el campo está super explotado y al contrario en el cual en grandes extensiones tienen muy pocos ovinos o bovinos.Lo que podria deberse a un mal terreno para la ganaderia o que simplemente es campo desaprovechado. También observamos que los propietarios del territorio Uruguayo mayormente son hombres entre los 40 y 60 años.
+- Relacionado al tamaño de las explotaciones observamos que existe una alta correlación con la dimensión del rodeo (cantidad de unidades ganaderas) a pesar de haber también casos con altos niveles de carga (unidades ganaderas por hectárea) y al contrario en el cual en grandes extensiones tienen muy pocos ovinos o vacunos.
 	
+Con respecto al personal contratado por los productores, vemos como el personal profesional es mayormente contratado a comparación del personal zafral.
+Centrándonos en éste último, podemos concluir que sin importar el propietario que lo contrate, su remuneración con respecto a los jornales que realice no varía mucho.	
+
+En relación con las cuestiones demográficas, observamos que los propietarios del territorio uruguayo mayormente son hombres entre los 40 y 60 años.
+
 	
 ```{r,eval=FALSE}
 datos %>% 
