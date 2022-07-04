@@ -3,9 +3,9 @@ title: "Proyecto"
 author: 'Angel Nuñez, Ignacio Marrero y Victoria Fernandez'
 date: '2022-07-04'
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 always_allow_html: yes
 ---
 
@@ -78,7 +78,7 @@ datos_1 %>%
 ## Análisis 1
 Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condición jurídica de los propietarios encuestados. Observamos como en su mayoría son personas físicas, lo que habilita la posibilidad de explorar la relación entre las características de las personas que dirigen la explotación y su aptitud innovadora, ya que las características demográficas solo estaban disponibles para este tipo de condición jurídica.
  
-```{r, fig.cap= "Gráfico de barras sobre la condicion Jurídica de los encuestados"}
+```{r fig1, fig.cap= "Gráfico de barras sobre la condicion Jurídica de los encuestados"}
 
 datos %>% 
   group_by(a9) %>% 
@@ -97,7 +97,7 @@ datos %>%
 Siguiendo con el análisis de las personas encuestadas, averiguamos la distribución de edades y el sexo de las personas físicas. También analizamos el nivel de educación de los encuestados (reagrupando la variable en 3 niveles "Básico" que equivale a los niveles de estudio ninguno y primario, "Secundaria" que equivale a secundaria básica y superior, y por último, nivel "Técnico o univarsitario" que son los niveles universitario y técnico) y nos encontramos con una población uniformemente distribuida en los 3 grupos,  lo que nos lleva a pensar que no hay una relación entre la tenencia de un establecimiento ganadero y el nivel de educación.
 
 
-```{r fig.cap="Gráfico de barras correspondiente a la relación entre edades y sexo de las personas físicas encuestadas."}
+```{r fig2, fig.cap="Gráfico de barras correspondiente a la relación entre edades y sexo de las personas físicas encuestadas."}
 
 datos %>% 
   filter(a9!=0,a10!=0,a10>0) %>% 
@@ -147,7 +147,7 @@ datos<-cbind(datos,aio_nueva)
 
 ```
 
-```{r, fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en establecimientos con vacunos según el nivel educativo del propietario"} 
+```{r fig3, fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en establecimientos con vacunos según el nivel educativo del propietario"} 
 
 datos %>% 
   group_by(a9,aiv_nueva,a12) %>% 
@@ -168,7 +168,7 @@ datos %>%
   scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
 ```
 
-```{r fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en establecimientos con ovinos según el nivel educativo del propietario"}
+```{r fig4, fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en establecimientos con ovinos según el nivel educativo del propietario"}
 
 datos %>% 
   group_by(a9,aio_nueva,a12) %>% 
@@ -227,6 +227,7 @@ datos %>%
                                                        '1' = 'Si',
                                                        '2' = 'No'))+ theme_bw()
 ```
+
 Exploramos si algunas características del sistema productivo como la presencia de bosques artificiales (ya sean estos de abrigo o de rendimiento) o praderas artificiales tenían diferentes niveles de innovación, debido a que el tipo de negocio puede ser distinto para estos establecimientos. Se observaron mayores niveles de innovación en los establecimientos que presentaban bosques artificiales, tanto para vacunos como ovinos. En cambio, la presencia de praderas artificiales no muestra una clara correlación con la cantidad de innovaciones presentes en la empresa en vacunos, pero si en ovinos.
 
 ```{r fig.cap="Gráfico mosaico del nivel de innovación por establecimiento con vacunos segun la presencia de bosques artificiales en la explotación"}
@@ -450,8 +451,10 @@ ggplotly(gf)
 
 ## Conclusiones Finales.
 
-	Podemos concluír en base al análisis, que las personas  dueñas de los campos con mayores niveles de estudios son quienes mas innvovan, y en relación a eso tambien son quienes mas contratan personal profesional.Esto nos demuestra que dichas personas puede que le dediquen, y/o inviertan mas tiempo y dinero en su produccion.
-	Relacionado al territorio observamos como ocurre lo esperado, que a mayor tamaño de territorio mas cantidad de unidades ganaderas a pesar de haber tambien casos en los cuáles el campo está super explotado y al contrario en el cual en grandes extensiones tienen muy pocos ovinos o bovinos.Lo que podria deberse a un mal terreno para la ganaderia o que simplemente es campo desaprovechado. También observamos que los propietarios del territorio Uruguayo mayormente son hombres entre los 40 y 60 años.
+
+
+Podemos concluir en base al análisis, que las personas dueñas de los campos con mayores niveles de estudios son quienes mas innvovan, y en relación a eso tambien son quienes mas contratan personal profesional.Esto nos demuestra que dichas personas puede que le dediquen, y/o inviertan mas tiempo y dinero en su produccion.
+Relacionado al territorio observamos como ocurre lo esperado, que a mayor tamaño de territorio mas cantidad de unidades ganaderas a pesar de haber tambien casos en los cuáles el campo está super explotado y al contrario en el cual en grandes extensiones tienen muy pocos ovinos o bovinos.Lo que podria deberse a un mal terreno para la ganaderia o que simplemente es campo desaprovechado. También observamos que los propietarios del territorio Uruguayo mayormente son hombres entre los 40 y 60 años.
 	
 	
 ```{r,eval=FALSE}
