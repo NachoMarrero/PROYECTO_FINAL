@@ -1,11 +1,11 @@
 ---
 title: "Proyecto"
-author: ''
-date: '2022-06-14'
+author: 'Angel Nuñez, Ignacio Marrero y Victoria Fernandez'
+date: '2022-07-04'
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 always_allow_html: yes
 ---
 
@@ -45,10 +45,6 @@ Trata de un muestreo cuya base muestral fue el censo general agropecuario del 20
 
 En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a través de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
 
-
-\textcolor{violet}{Debe quedar más claro que son los datos,tienen un reporte sobre la encuensta que les puede ayudar para escribir cuál es el objetivo e dicha encuesta y referenciarla, veo que escriben más abajo esto pero en la introduccion deben porner algo más que es una encuesta gropecuaria. Los paquetes y R se deben citar. 
-Les puse el doc que compile a pdf, echo=FALSE para que no salga el código en el doc por defecto y les arreglé la tabla}
-
 ```{r, results='asis'}
 options(xtable.comment = FALSE)
 
@@ -75,6 +71,7 @@ datos_1 <- data.frame(Variable = c("a11",
 datos_1 %>% 
   xtable(caption="Descripción de las Variables") %>%
   print(include.rownames = FALSE)
+
 ```
 
 ## Análisis 1
@@ -97,11 +94,8 @@ datos %>%
   theme(legend.position='none') 
 ```
 
-\textcolor{violet}{Deben incluir referencias cruzadas y en la figura debe aparecer el nombre del gráfico y la variable o variables que están graficando. Comentar lo que ven en las figuras siempre, revisen ortografía! faltan muchos tildes...}
-
 Siguiendo con el análisis de las personas encuestadas, averiguamos la distribución de edades y el sexo de las personas físicas. También analizamos el nivel de educación de los encuestados (reagrupando la variable en 3 niveles "Básico" que equivale a los niveles de estudio ninguno y primario, "Secundaria" que equivale a secundaria básica y superior, y por último, nivel "Técnico o univarsitario" que son los niveles universitario y técnico) y nos encontramos con una población uniformemente distribuida en los 3 grupos,  lo que nos lleva a pensar que no hay una relación entre la tenencia de un establecimiento ganadero y el nivel de educación.
 
-\textcolor{violet}{Recodificaron la variale nivel educativo? pongan en esos tres niveles como los agruparon ustedes. }
 
 ```{r fig.cap="Gráfico de barras correspondiente a la relación entre edades y sexo de las personas físicas encuestadas."}
 
@@ -120,7 +114,7 @@ datos %>%
 ```
 
 
-Continuando con la variable de educación, y manteniendo la reagrupación anterior, investigamos como es la relación entre ésta y las actividades de innovación realizadas en el período (siendo 8 el máximo número posible de distintas innovaciones), en el cual observamos que las personas con mayor nivel educativo son mas propensas a realizar innovaciones tanto en ovejas como en vacas. 
+Continuando con la variable de educación, y manteniendo la reagrupación anterior, investigamos como es la relación entre ésta y las actividades de innovación realizadas en el período (siendo 8 el máximo número posible de distintas innovaciones), en el cual observamos que las personas con mayor nivel educativo son mas propensas a realizar innovaciones tanto en vacunos como en ovinos. 
 
 ```{r}
 aiv_nueva <- datos %>% 
@@ -153,7 +147,7 @@ datos<-cbind(datos,aio_nueva)
 
 ```
 
-```{r, fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en Vacas según el nivel educativo del propietario ."} 
+```{r, fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en establecimientos con vacunos según el nivel educativo del propietario"} 
 
 datos %>% 
   group_by(a9,aiv_nueva,a12) %>% 
@@ -174,7 +168,7 @@ datos %>%
   scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
 ```
 
-```{r fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en Vacas según el nivel educativo del propietario"}
+```{r fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en establecimientos con ovinos según el nivel educativo del propietario"}
 
 datos %>% 
   group_by(a9,aio_nueva,a12) %>% 
@@ -195,9 +189,10 @@ datos %>%
   scale_fill_brewer(name="Nivel educativo",palette = "Accent")+ theme_bw()
 
 ```
+
 También analizamos la relación entre la contratación de asistencia técnica especializada y las innovaciones, podemos visualizar como la cantidad de personal profesional contratado es mayor en quienes mas innovaciones realizaron, podriamos deducir que quienes mas innovan tambien poseen mayores niveles de asistencia profesional para dicha actividad.
 
-```{r}
+```{r fig.cap="Gráfico de barras del nivel de innovación por establecimiento con vacunos segun la contratación de asistencia técnica especializada"}
 datos %>% 
   group_by(a9,aiv_nueva,prof_1) %>%
   mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
@@ -215,7 +210,7 @@ datos %>%
                                                        '2' = 'No'))+ theme_bw()
 ```
 
-```{r}
+```{r fig.cap="Gráfico de barras del nivel de innovación por establecimiento con ovinos segun la contratación de asistencia técnica especializada"}
 datos %>% 
   group_by(a9,aio_nueva,prof_1) %>%
   mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
@@ -232,96 +227,126 @@ datos %>%
                                                        '1' = 'Si',
                                                        '2' = 'No'))+ theme_bw()
 ```
+Exploramos si algunas características del sistema productivo como la presencia de bosques artificiales (ya sean estos de abrigo o de rendimiento) o praderas artificiales tenían diferentes niveles de innovación, debido a que el tipo de negocio puede ser distinto para estos establecimientos. Se observaron mayores niveles de innovación en los establecimientos que presentaban bosques artificiales, tanto para vacunos como ovinos. En cambio, la presencia de praderas artificiales no muestra una clara correlación con la cantidad de innovaciones presentes en la empresa en vacunos, pero si en ovinos.
 
-
-```{r}
+```{r fig.cap="Gráfico mosaico del nivel de innovación por establecimiento con vacunos segun la presencia de bosques artificiales en la explotación"}
 datos %>% 
-  group_by(a9,aiv_nueva,ba_1) %>%
-  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
-                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
-                               aiv_nueva %in% c(3,4,5) ~ "3 a 5",
-                               aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-  filter(a9=="1",ba_1!="0") %>% 
-  summarise(n=n()) %>%
-  mutate(freq=n/sum(n)) %>%
-  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(ba_1)))+
-  geom_bar(stat="identity",position = "dodge")+
-  labs(x="Innovación",y="Frecuencia")+
-  scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
-                                                       '1' = 'Si',
-                                                       '2' = 'No'))+ theme_bw()
-
-
-
-
-datos %>% 
-  group_by(a9,aiv_nueva,ba_1) %>%
-  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
-                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
-                               aiv_nueva %in% c(3,4,5) ~ "3 a 5",
-                               aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-  filter(a9=="1",ba_1!="0") %>%
-  ggplot() +
-  geom_mosaic(aes(x = product(ba_1, aiv_nueva), fill= ba_1))+
-  scale_fill_brewer(palette = "Set3")+
-  theme_bw()
+        group_by(a9,aiv_nueva,ba_1) %>%
+        mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
+                                     aiv_nueva %in% c(1,2)  ~ "1 o 2",
+                                     aiv_nueva %in% c(3,4,5) ~ "3-5",
+                                     aiv_nueva %in% c(6,7,8) ~ "6-8")) %>% 
+        filter(a9=="1",ba_1!="0") %>%
+        ggplot() +
+        geom_mosaic(aes(x = product(ba_1, aiv_nueva), fill= ba_1))+
+        scale_fill_brewer(palette = "Set3")+
+        labs(x="Innovación",y="Frecuencia")+
+        scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
+          '1' = 'Si',
+          '2' = 'No'))+ theme_bw()
 ```
 
 
-```{r}
+```{r fig.cap="Gráfico mosaico del nivel de innovación por establecimiento con ovinos segun la presencia de bosques artificiales en la explotación"}
 datos %>% 
-  group_by(a9,aio_nueva,ba_1) %>%
+              group_by(a9,aio_nueva,ba_1) %>%
+              mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
+                                           aio_nueva %in% c(1,2)  ~ "1 o 2",
+                                           aio_nueva %in% c(3,4,5) ~ "3-5",
+                                           aio_nueva %in% c(6,7,8) ~ "6-8")) %>% 
+              filter(a9=="1",ba_1!="0") %>%
+              ggplot() +
+              geom_mosaic(aes(x = product(ba_1, aio_nueva), fill= ba_1))+
+              scale_fill_brewer(palette = "Set3")+
+              labs(x="Innovación",y="Frecuencia")+
+              scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
+                '1' = 'Si',
+                '2' = 'No'))+ theme_bw()
+```
+
+```{r fig.cap="Gráfico mosaico del nivel de innovación por establecimiento con vacunos segun la presencia de praderas artificiales en la explotación"}
+
+datos %>% 
+        group_by(a9,aiv_nueva,pa_1) %>%
+        mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
+                                     aiv_nueva %in% c(1,2)  ~ "1 o 2",
+                                     aiv_nueva %in% c(3,4,5) ~ "3-5",
+                                     aiv_nueva %in% c(6,7,8) ~ "6-8")) %>% 
+        filter(a9=="1",pa_1!="0") %>%
+        ggplot() +
+        geom_mosaic(aes(x = product(pa_1, aiv_nueva), fill= pa_1))+
+        scale_fill_brewer(palette = "Set3")+
+        labs(x="Innovación",y="Frecuencia")+
+        scale_fill_brewer(name="Praderas artificiales",palette = "Set1",labels = c(
+          '1' = 'Si',
+          '2' = 'No'))+ theme_bw()
+```
+
+```{r fig.cap="Gráfico mosaico del nivel de innovación por establecimiento con ovinos segun la presencia de praderas artificiales en la explotación"}
+datos %>% 
+              group_by(a9,aio_nueva,pa_1) %>%
+              mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
+                                           aio_nueva %in% c(1,2)  ~ "1 o 2",
+                                           aio_nueva %in% c(3,4,5) ~ "3-5",
+                                           aio_nueva %in% c(6,7,8) ~ "6-8")) %>% 
+              filter(a9=="1",pa_1!="0") %>%
+              ggplot() +
+              geom_mosaic(aes(x = product(pa_1, aio_nueva), fill= pa_1))+
+              scale_fill_brewer(palette = "Set3")+
+              labs(x="Innovación",y="Frecuencia")+
+              scale_fill_brewer(name="Praderas artificiales",palette = "Set1",labels = c(
+                '1' = 'Si',
+                '2' = 'No'))+ theme_bw()
+
+```
+
+Como era esperable, los establecimientos de los estratos superiores (en cuanto a la cantidad de unidades ganaderas) son los que presentan mayores niveles de innovación. Esto se podría relacionar con niveles de gerenciamiento superior debidos a la escala y mayor disponibilidad de capital para invertir.
+
+```{r fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en establecimientos con vacunos según el estrato de tamaño en unidades ganaderas"}
+
+datos %>% 
+  group_by(a9,aiv_nueva,est) %>% 
+  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
+                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
+                               aiv_nueva %in% c(3,4,5) ~ "3 a 5",
+                               aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
+   mutate(est = case_when(est %in% c(0)  ~ "0 nin",
+                          est %in% c(1,2) ~ "<100 a 149 UG",
+                          est %in% c(3,4) ~ "150 599 UG",
+                          est %in% c(5,6) ~ "600 a 1.999 UG",
+                          est %in% c(7,8) ~ "2.000 a 3.500+ UG")) %>% 
+  filter(a9=="1") %>% 
+  summarise(n=n() ) %>%
+  mutate(freq=n/sum(n)) %>%
+  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(est)))+
+  geom_bar(stat="identity")+
+  labs(x="Innovación",y="Frecuencia")+
+  scale_fill_brewer(name="Estrato de tamaño",palette = "Paired")+ theme_bw()
+```
+
+
+```{r fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en establecimientos con ovinos según el estrato de tamaño en unidades ganaderas"}
+
+datos %>% 
+  group_by(a9,aio_nueva,est) %>% 
   mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
                                aio_nueva %in% c(1,2)  ~ "1 o 2",
                                aio_nueva %in% c(3,4,5) ~ "3 a 5",
                                aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-  filter(a9=="1",ba_1!="0") %>% 
-  summarise(n=n()) %>%
+   mutate(est = case_when(est %in% c(0)  ~ "0 nin",
+                          est %in% c(1,2) ~ "<100 a 149 UG",
+                          est %in% c(3,4) ~ "150 599 UG",
+                          est %in% c(5,6) ~ "600 a 1.999 UG",
+                          est %in% c(7,8) ~ "2.000 a 3.500+ UG")) %>% 
+  filter(a9=="1") %>% 
+  summarise(n=n() ) %>%
   mutate(freq=n/sum(n)) %>%
-  ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(ba_1)))+
-  geom_bar(stat="identity",position = "dodge")+
+  ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(est)))+
+  geom_bar(stat="identity")+
   labs(x="Innovación",y="Frecuencia")+
-  scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
-                                                       '1' = 'Si',
-                                                       '2' = 'No'))+ theme_bw()
+  scale_fill_brewer(name="Estrato de tamaño",palette = "Paired")+ theme_bw()
 ```
 
-```{r}
-datos %>% 
-  group_by(a9,aiv_nueva,pa_1) %>%
-  mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
-                               aiv_nueva %in% c(1,2)  ~ "1 o 2",
-                               aiv_nueva %in% c(3,4,5) ~ "3 a 5",
-                               aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-  filter(a9=="1",pa_1!="0") %>% 
-  summarise(n=n()) %>%
-  mutate(freq=n/sum(n)) %>%
-  ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(pa_1)))+
-  geom_bar(stat="identity",position = "dodge")+
-  labs(x="Innovación",y="Frecuencia")+
-  scale_fill_brewer(name="Praderas artificiales",palette = "Set1",labels = c(
-                                                       '1' = 'Si',
-                                                       '2' = 'No'))+ theme_bw()
-```
-
-```{r}
-datos %>% 
-  group_by(a9,aio_nueva,pa_1) %>%
-  mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
-                               aio_nueva %in% c(1,2)  ~ "1 o 2",
-                               aio_nueva %in% c(3,4,5) ~ "3 a 5",
-                               aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-  filter(a9=="1",pa_1!="0") %>% 
-  summarise(n=n()) %>%
-  mutate(freq=n/sum(n)) %>%
-  ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(pa_1)))+
-  geom_bar(stat="identity",position = "dodge")+
-  labs(x="Innovación",y="Frecuencia")+
-  scale_fill_brewer(name="Praderas artificiales",palette = "Set1",labels = c(
-                                                       '1' = 'Si',
-                                                       '2' = 'No'))+ theme_bw()
-
-```
 
 
 ## Análisis 2
@@ -329,7 +354,7 @@ datos %>%
 En esta parte del análisis veremos características de las explotaciones.
 Primero veremos si existen establecimientos con muy poca extension y grandes cantidades de unidades ganaderas, observamos que hay muy pocos productores con mas de cinco unidades ganaderas que tengan superficies de menos de 600 hectáreas, también notamos que hay una gran distrubución del estrato que poseen para todos los encuestados, hay similiar cantidad de grandes productores como de pequeños.
 
-```{r,eval=FALSE}
+```{r}
 datos %>% 
   group_by(b5,b3_7,est) %>% 
   filter(b5!=0) %>% 
@@ -343,6 +368,7 @@ datos %>%
   scale_fill_brewer(palette = "Set2")+
   theme_bw()
 ```
+
 Para utilizar la superficie se corrigió por la calidad del suelo, llevandola a hectáreas conneat 100 equivalentes de forma tal que sean calidades similares en términos de productividad.
 
 
@@ -439,10 +465,7 @@ gf<-datos %>%
 ggplotly(gf)
 ```
 
-\textcolor{violet}{En cada gráfico deben poner el nombre del mismo y variables que presentan. El comentario puede también ser extendido en el texto y usar referencias cruzadas. Hay varios sin comentar supongo que están trabajando en ellos, mañana vemos si hay alguna otra variable interesante para incluir en el análisis. No tienen nada sobre la aplicación tienen que ponerse a trabajar en la app}
-
-
-```{r}
+```{r,eval=FALSE}
 datos %>% 
   select(dpto)
 

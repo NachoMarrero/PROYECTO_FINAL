@@ -8,9 +8,7 @@ library(rgdal)
 library(patchwork)
 library(plotly)
 library(shiny)
-#install.packages('shinythemes')
 library(shinythemes)
-#install.packages('bslib')
 library(bslib)
 library(shinydashboard)
 library(shinyWidgets)
@@ -74,10 +72,11 @@ ui <- fluidPage(
              tabPanel("Innovación de los productores",
                sidebarLayout(
                  sidebarPanel(style = "background-color: LightBlue;",
-                      selectInput('vor','Variable',c('Bovinos'='aiv_nueva','Ovinos'='aio_nueva')),
+                      selectInput('vor','Variable',c('Vacunos'='aiv_nueva','Ovinos'='aio_nueva')),
                       selectInput('var','Colorear por',c('Nivel educativo'='a12',
                                                          'Personal profesional'='prof_1',
-                                                         'Bosques artificiales'='ba_1'))),
+                                                         'Bosques artificiales'='ba_1',
+                                                         'Praderas artificiales'='pa_1'))),
                  mainPanel(h2("", align = "center"),
                            plotOutput("scat")))),
              tabPanel("Analisis del personal contratado",
@@ -197,26 +196,49 @@ server <- function(input, output){
             plot.background = element_rect(fill = "#F0F8FF"), 
             panel.background = element_rect(fill = "#F0F8FF", colour="black")
           )
-    }else{
+            }else{
+              if(input$var=='ba_1'){ 
       datos %>% 
         group_by(a9,aiv_nueva,ba_1) %>%
         mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
                                      aiv_nueva %in% c(1,2)  ~ "1 o 2",
-                                     aiv_nueva %in% c(3,4,5) ~ "3 a 5",
-                                     aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-        filter(a9=="1",ba_1!="0") %>% 
-        summarise(n=n()) %>%
-        mutate(freq=n/sum(n)) %>%
-        ggplot(aes(x=factor(aiv_nueva),y=freq,fill=factor(.data[[input$var]])))+
-        geom_bar(stat="identity",position = "dodge")+
-        labs(x="Innovación",y="Frecuencia")+
+                                     aiv_nueva %in% c(3,4,5) ~ "3-5",
+                                     aiv_nueva %in% c(6,7,8) ~ "6-8")) %>% 
+        mutate(ba_1 = case_when(ba_1 %in% c(1)  ~ "Si",
+                                ba_1 %in% c(2)  ~ "No")) %>% 
+        filter(a9=="1",ba_1!="0") %>%
+        ggplot() +
+        geom_mosaic(aes(x = product(ba_1, aiv_nueva), fill= ba_1))+
+        scale_fill_brewer(palette = "Set3")+
+        labs(x="Innovación",y="Bosques artificiales")+
         scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
           '1' = 'Si',
-          '2' = 'No'))+ theme(
+          '2' = 'No'))+
+        theme(
             plot.background = element_rect(fill = "#F0F8FF"), 
             panel.background = element_rect(fill = "#F0F8FF", colour="black")
           )
-      }
+            }else{ 
+              datos %>% 
+                group_by(a9,aiv_nueva,pa_1) %>%
+                mutate(aiv_nueva = case_when(aiv_nueva %in% c(0)  ~ "0 nin",
+                                             aiv_nueva %in% c(1,2)  ~ "1 o 2",
+                                             aiv_nueva %in% c(3,4,5) ~ "3-5",
+                                             aiv_nueva %in% c(6,7,8) ~ "6-8")) %>%
+                mutate(pa_1 = case_when(pa_1 %in% c(1)  ~ "Si",
+                                        pa_1 %in% c(2)  ~ "No")) %>% 
+                filter(a9=="1",pa_1!="0") %>%
+                ggplot() +
+                geom_mosaic(aes(x = product(pa_1, aiv_nueva), fill= pa_1))+
+                scale_fill_brewer(palette = "Set3")+
+                labs(x="Innovación",y="Praderas artificiales")+
+                scale_fill_brewer(name="Praderas artificiales",palette = "Set1",labels = c(
+                  '1' = 'Si',
+                  '2' = 'No'))+  theme(
+                    plot.background = element_rect(fill = "#F0F8FF"), 
+                    panel.background = element_rect(fill = "#F0F8FF", colour="black"))
+            }
+       }
      }
     }else{
       if(input$vor=='aio_nueva'){
@@ -262,24 +284,47 @@ server <- function(input, output){
                   panel.background = element_rect(fill = "#F0F8FF", colour="black")
                 )
           }else{
+            if(input$var=='ba_1'){
             datos %>% 
               group_by(a9,aio_nueva,ba_1) %>%
               mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
                                            aio_nueva %in% c(1,2)  ~ "1 o 2",
-                                           aio_nueva %in% c(3,4,5) ~ "3 a 5",
-                                           aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
-              filter(a9=="1",ba_1!="0") %>% 
-              summarise(n=n()) %>%
-              mutate(freq=n/sum(n)) %>%
-              ggplot(aes(x=factor(aio_nueva),y=freq,fill=factor(.data[[input$var]])))+
-              geom_bar(stat="identity",position = "dodge")+
-              labs(x="Innovación",y="Frecuencia")+
+                                           aio_nueva %in% c(3,4,5) ~ "3-5",
+                                           aio_nueva %in% c(6,7,8) ~ "6-8")) %>%
+                mutate(ba_1 = case_when(ba_1 %in% c(1)  ~ "Si",
+                                        ba_1 %in% c(2)  ~ "No")) %>% 
+              filter(a9=="1",ba_1!="0") %>%
+              ggplot() +
+              geom_mosaic(aes(x = product(ba_1, aio_nueva), fill= ba_1))+
+              scale_fill_brewer(palette = "Set3")+
+              labs(x="Innovación",y="Bosques artificiales")+
               scale_fill_brewer(name="Bosques artificiales",palette = "Set3",labels = c(
                 '1' = 'Si',
-                '2' = 'No'))+ theme(
+                '2' = 'No'))+
+              theme(
                   plot.background = element_rect(fill = "#F0F8FF"), 
                   panel.background = element_rect(fill = "#F0F8FF", colour="black")
                 )
+            }else{
+              datos %>% 
+                group_by(a9,aio_nueva,pa_1) %>%
+                mutate(aio_nueva = case_when(aio_nueva %in% c(0)  ~ "0 nin",
+                                             aio_nueva %in% c(1,2)  ~ "1 o 2",
+                                             aio_nueva %in% c(3,4,5) ~ "3-5",
+                                             aio_nueva %in% c(6,7,8) ~ "6-8")) %>%
+                mutate(pa_1 = case_when(pa_1 %in% c(1)  ~ "Si",
+                                        pa_1 %in% c(2)  ~ "No")) %>% 
+                filter(a9=="1",pa_1!="0") %>%
+                ggplot() +
+                geom_mosaic(aes(x = product(pa_1, aio_nueva), fill= pa_1))+
+                scale_fill_brewer(palette = "Set3")+
+                labs(x="Innovación",y="Praderas artificiales")+
+                scale_fill_brewer(name="Praderas artificiales",palette = "Set1",labels = c(
+                  '1' = 'Si',
+                  '2' = 'No'))+  theme(
+                    plot.background = element_rect(fill = "#F0F8FF"), 
+                    panel.background = element_rect(fill = "#F0F8FF", colour="black"))
+            }
           }
         }
       }
