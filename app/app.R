@@ -68,6 +68,8 @@ ui <- fluidPage(
              tabPanel("Datos de los encuestados",
                       selectInput('ver','Variable',
                                   c('Rango de edad'='cut(a11, breaks = 5,labes=FALSE)','Condicion juridica'='a9')),
+                      selectInput('vir','Colorear',
+                                  c('Sexo'='a10','Condicion Juridica'='a9')),
                       plotOutput('encuestados')),
              tabPanel("Innovación de los productores",
                sidebarLayout(
@@ -101,7 +103,9 @@ server <- function(input, output){
         #filter(a=="0-200",a=="200-400",a=="400-600",a=="600") %>% 
         ggplot() +
         geom_mosaic(aes(x = product(a, est), fill= a))+
-        scale_fill_brewer(palette = "Set2")+
+        scale_fill_brewer(name='Cantidad de hectareas',
+                          palette = "Set2")+
+        labs(x='Estrato')+
         theme(aspect.ratio=1)+
         theme(plot.background = element_rect(fill = "#F0F8FF"), 
               panel.background = element_rect(fill = "#F0F8FF", colour="black"))
@@ -128,28 +132,44 @@ server <- function(input, output){
           scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
           labs(y='Porcentaje Personal Profesional',fill='',x='')+
           scale_y_continuous(breaks = c(20,40,60,80))+
-          theme(aspect.ratio=1)
+          theme(aspect.ratio=1,
+                plot.background = element_rect(fill = "#F0F8FF"),
+                panel.background = element_rect(fill = "#F0F8FF", colour="black"))+
           ggplot(tabla_porcentaje)+
           geom_col(aes(x=a9,y=Porc_Z*100,fill=factor(a9)))+
           geom_text(aes(x=a9,y=Porc_Z*100,label=round(Porc_Z*100)),vjust=2)+
           theme(legend.position = 'none')+
           scale_y_continuous()+
           labs(y='Porcentaje Personal zafral',x='')+
-          scale_y_continuous(breaks = c(20,40,60,80))+ theme(plot.background = element_rect(fill = "#F0F8FF"), 
-                                                             panel.background = element_rect(fill = "#F0F8FF", colour="black"))
+          scale_y_continuous(breaks = c(20,40,60,80))+
+          theme(aspect.ratio=1,
+                plot.background = element_rect(fill = "#F0F8FF"),
+                panel.background = element_rect(fill = "#F0F8FF", colour="black"))
       }else{
-         datos %>% 
-           filter(pz_1==1,pz_2>0,pz_3>0) %>% 
-           group_by(a9,a12) %>%
-           ggplot()+geom_boxplot(aes(y=pz_3/pz_2,fill=factor(a9)))+
-           scale_y_log10()+
-           facet_grid(~a9)+
-           scale_x_discrete(name='')+
-           labs(y="Renumeración/Jornal",fill='Condicion Juridica')+#theme(legend.position='bottom')+
-           scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
-          theme(aspect.ratio=1)+
-          theme(plot.background = element_rect(fill = "#F0F8FF"), 
-                                     panel.background = element_rect(fill = "#F0F8FF", colour="black"))
+        if(input$grafico=='boxplot'){
+          datos %>% 
+            filter(pz_1==1,pz_2>0,pz_3>0) %>% 
+            group_by(a9,a12) %>%
+            ggplot()+geom_boxplot(aes(y=pz_3/pz_2,fill=factor(a9)))+
+            scale_y_log10()+
+            facet_grid(~a9)+
+            scale_x_discrete(name='')+
+            labs(y="Renumeración/Jornal",fill='Condicion Juridica')+#theme(legend.position='bottom')+
+            scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
+            theme(aspect.ratio=1)+
+            theme(plot.background = element_rect(fill = "#F0F8FF"), 
+                  panel.background = element_rect(fill = "#F0F8FF", colour="black"))
+        }else{
+          gf<-datos %>%
+            filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
+            ggplot(aes(y=pz_2,x=pz_3))+
+            geom_point(alpha=0.5)+
+            geom_smooth(formula= y ~ x,method ='lm',color='red',fill='blue')+
+            scale_y_log10()+
+            scale_x_log10()+
+            labs(x='Renumeracion',y='Jornales')
+          ggplotly(gf)
+        }
       }
     }
 })
@@ -331,10 +351,10 @@ server <- function(input, output){
      }
   })
   output$encuestados<- renderPlot({
-    if(input$ver=='cut(a11, breaks = 5,labes=FALSE)'){
+    if(input$ver=='cut(a11, breaks = 5,labes=FALSE)'& input$vir=='a10'){
       datos %>% 
         filter(a9!=0,a10!=0,a10>0) %>% 
-        ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(a10)))+
+        ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(.data[[input$vir]])))+
         geom_bar()+                  
         labs(x='Rango de edades',y='Cantidad')+
         scale_x_discrete(name="Rango de edad",
@@ -347,19 +367,58 @@ server <- function(input, output){
               panel.background = element_rect(fill = "#F0F8FF", colour="black"))+
         theme(aspect.ratio=1)
     }else{
-      datos %>% 
-        group_by(a9) %>% 
-        ggplot(aes(x=fct_infreq(factor(a9)),fill=factor(a9)))+
-        geom_bar()+
-        labs(y="Cantidad")+
-        scale_x_discrete(name="Condición jurídica",labels = c(
-          '1' = 'Persona física',
-          '2' = 'Sociedad sin contrato',
-          '3' = 'Sociedad con \n contrato legal',
-          '4' = 'Otra'),palette="Accent") +
-        theme(plot.background = element_rect(fill = "#F0F8FF"), 
-                                                 panel.background = element_rect(fill = "#F0F8FF", colour="black"))+
-        theme(legend.position='none',aspect.ratio=1)
+      if(input$ver=='cut(a11, breaks = 5,labes=FALSE)'&input$vir=='a9'){
+        datos %>% 
+          #filter(a9!=0,a10!=0,a10>0) %>% 
+          ggplot(aes(x=cut(a11, breaks = 5,labes=FALSE),fill=factor(.data[[input$vir]])))+
+          geom_bar()+                  
+          labs(x='Rango de edades',y='Cantidad',fill='Condicion Juridica')+
+          scale_x_discrete(name="Rango de edad",
+                           labels = c('Menor a 20','Entre 20 y 40',
+                                      'Entre 41 y 60','Entre 61 y 80',
+                                      'Mayor a 81'))+
+          scale_fill_brewer(name="Condición jurídica",labels = c(
+            '1' = 'Persona física',
+            '2' = 'Sociedad sin contrato',
+            '3' = 'Sociedad con \n contrato legal',
+            '4' = 'Otra'),palette="Accent")+
+          theme(plot.background = element_rect(fill = "#F0F8FF"), 
+                panel.background = element_rect(fill = "#F0F8FF", colour="black"))+
+          theme(aspect.ratio=1)
+      }else{if(input$ver=='a9'&input$vir=='a9'){
+        datos %>% 
+          group_by(a9) %>% 
+          ggplot(aes(x=fct_infreq(factor(a9)),fill=factor(.data[[input$vir]])))+
+          geom_bar()+
+          labs(y="Cantidad")+
+          scale_x_discrete(name="Condición jurídica",labels = c(
+            '1' = 'Persona física',
+            '2' = 'Sociedad sin contrato',
+            '3' = 'Sociedad con \n contrato legal',
+            '4' = 'Otra'),palette="Accent") +
+          theme(plot.background = element_rect(fill = "#F0F8FF"), 
+                panel.background = element_rect(fill = "#F0F8FF", colour="black"))+
+          theme(legend.position='none',aspect.ratio=1)
+      }else{
+        datos %>% 
+          group_by(a9) %>% 
+          ggplot(aes(x=fct_infreq(factor(a9)),fill=factor(.data[[input$vir]])))+
+          geom_bar()+
+          labs(y="Cantidad",fill='Sexo')+
+          scale_x_discrete(name="Condición jurídica",labels = c(
+            '1' = 'Persona física',
+            '2' = 'Sociedad sin contrato',
+            '3' = 'Sociedad con \n contrato legal',
+            '4' = 'Otra'),palette="Accent") +
+          theme(plot.background = element_rect(fill = "#F0F8FF"), 
+                panel.background = element_rect(fill = "#F0F8FF", colour="black"))+
+          theme(aspect.ratio=1)+
+          scale_fill_brewer(name="Sexo",labels = c(
+            '0' = 'No es persona física',
+            '1' = 'Masculino',
+            '2' = 'Femenino'),palette="Accent")
+      }
+      }
     }
   })
 }
