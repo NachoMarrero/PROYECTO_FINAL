@@ -95,7 +95,7 @@ server <- function(input, output){
       datos %>% 
         group_by(b5,b3_7,est) %>% 
         filter(b5!=0) %>% 
-        summarise(a=b5*b3_7/100)%>%
+        summarise(a=b5*b3_7/100) %>%
         mutate(a = case_when(a %in% c(0:200)  ~ "0-200",
                              a %in% c(201:400)  ~ "200-400",
                              a %in% c(401:600)  ~ "400-600",
