@@ -4,13 +4,14 @@ author: 'Angel Nuñez, Ignacio Marrero y Victoria Fernandez'
 date: '2022-07-04'
 output:
   pdf_document: default
+  fig_caption: yes
   html_document:
     df_print: paged
-always_allow_html: yes
+always_allow_html: TRUE
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, fig.pos = 'hbpt', out.extra = '', message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE, fig.pos = 'hbpt', out.extra = '', message = FALSE, warning = FALSE)
 ```
 
 ```{r}
