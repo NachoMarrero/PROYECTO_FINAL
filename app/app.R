@@ -85,9 +85,11 @@ ui <- fluidPage(
                       sidebarLayout(
                         sidebarPanel(style = "background-color: LightBlue;",
                                      selectInput('grafico','Que grafico le interesa?',
-                                                 c('mosaico','barras','boxplot','puntos'))),
+                                                 c('mosaico','barras','boxplot'))),
                         mainPanel(h2("", align = "center"),
-                                  plotOutput("barplot"))))))
+                                  plotOutput("barplot")))),
+             tabPanel("Grafico interactivo",
+                                plotlyOutput("plotly"))))
 
 server <- function(input, output){
   output$barplot<- renderPlot({
@@ -161,19 +163,20 @@ server <- function(input, output){
             theme(aspect.ratio=1)+
             theme(plot.background = element_rect(fill = "#F0F8FF"), 
                   panel.background = element_rect(fill = "#F0F8FF", colour="black"))
-        }else{
-          gf<-datos %>%
-            filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
-            ggplot(aes(y=pz_2,x=pz_3))+
-            geom_point(alpha=0.5)+
-            geom_smooth(formula= y ~ x,method ='lm',color='red',fill='blue')+
-            scale_y_log10()+
-            scale_x_log10()+
-            labs(x='Renumeracion',y='Jornales')
-          ggplotly(gf)
         }
       }
     }
+  })
+  output$plotly<- renderPlotly({
+      gf<-datos %>%
+        filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
+        ggplot(aes(y=pz_2,x=pz_3))+
+        geom_point(alpha=0.5)+
+        geom_smooth(formula= y ~ x,method ='lm',color='red',fill='blue')+
+        scale_y_log10()+
+        scale_x_log10()+
+        labs(x='Renumeracion',y='Jornales')
+      ggplotly(gf)
   })
   output$scat<- renderPlot({
     if(input$vor=='aiv_nueva'){
