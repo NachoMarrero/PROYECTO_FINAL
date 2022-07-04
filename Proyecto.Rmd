@@ -3,9 +3,9 @@ title: "Proyecto"
 author: 'Angel Nuñez, Ignacio Marrero y Victoria Fernandez'
 date: '2022-07-04'
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 always_allow_html: yes
 ---
 
@@ -434,7 +434,7 @@ datos %>%
         theme_bw()
 ```
 
-Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.Observamos clara relacion lineal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración
+Filtrando por quienes contratan persona zafral, queríamos ver si hay alguna relación entre los jornales y su respectiva renumeración.Observamos clara relacion líneal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración
 ```{r,fig.cap="Gráfico de puntos sobre la cantidad de jornales y su respectiva renumeración"}
 
 gf<-datos %>%
@@ -448,9 +448,10 @@ gf<-datos %>%
 ggplotly(gf)
 ```
 
-##Conclusiones Finales.
+## Conclusiones Finales.
 
-	Podemos concluir en base al analysis, que las personas  dueñas de los campos con mayores niveles de estudios son quienes mas innvovan, y en relacion a eso tambien son quines mas contratan personal profesional, esto nos demeustra que dichas personas puede que le dediquen, o inviertan mas tiempo y dinero en su produccion, relacionado al territorio observamos como ocurre lo esperado que a mayor tamaño de territorio mas cantidad de Unidades ganaderas a pesar de haber tambien casos en los cuales el campo esta super explotado y al contrario en el cual en grandes extensiones tienen muy pocos ovinos o bovinos lo cual podria deberse a un mal terreno para la ganaderia o que simplemente es campo desaptovechado. Tambien observamos que los propietarios del territorio Uruguayo mayormente son hombres entre los 40 y 60 años.
+	Podemos concluír en base al análisis, que las personas  dueñas de los campos con mayores niveles de estudios son quienes mas innvovan, y en relación a eso tambien son quienes mas contratan personal profesional.Esto nos demuestra que dichas personas puede que le dediquen, y/o inviertan mas tiempo y dinero en su produccion.
+	Relacionado al territorio observamos como ocurre lo esperado, que a mayor tamaño de territorio mas cantidad de unidades ganaderas a pesar de haber tambien casos en los cuáles el campo está super explotado y al contrario en el cual en grandes extensiones tienen muy pocos ovinos o bovinos.Lo que podria deberse a un mal terreno para la ganaderia o que simplemente es campo desaprovechado. También observamos que los propietarios del territorio Uruguayo mayormente son hombres entre los 40 y 60 años.
 	
 	
 ```{r,eval=FALSE}
