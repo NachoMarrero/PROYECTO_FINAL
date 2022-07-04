@@ -67,7 +67,7 @@ ui <- fluidPage(
              tabPanel("Datos de los encuestados",
                       selectInput('ver','Variable',
                                   c('Rango de edad'='cut(a11, breaks = 5,labes=FALSE)','Condicion juridica'='a9')),
-                      selectInput('vir','Colorear',
+                      radioButtons('vir','Colorear por',
                                   c('Sexo'='a10','Condicion Juridica'='a9')),
                       plotOutput('encuestados')),
              tabPanel("Innovación de los productores",
@@ -93,7 +93,6 @@ server <- function(input, output){
   output$barplot<- renderPlot({
     if(input$grafico=='mosaico'){
       datos %>% 
-<<<<<<< HEAD
         group_by(b5,b3_7,est) %>% 
         filter(b5!=0) %>% 
         summarise(a=b5*b3_7/100) %>%
@@ -101,14 +100,11 @@ server <- function(input, output){
                              a %in% c(201:400)  ~ "200-400",
                              a %in% c(401:600)  ~ "400-600",
                              a > 600 ~ "600")) %>%
-        #filter(a=="0-200",a=="200-400",a=="400-600",a=="600") %>% 
-=======
         group_by(b3_7,est) %>%
         mutate(b3_7 = case_when(b3_7 %in% c(0:200)  ~ "0-200",
                                 b3_7 %in% c(201:400)  ~ "200-400",
                                 b3_7 %in% c(401:600)  ~ "400-600",
                                 b3_7 > 600 ~ "600"))  %>% 
->>>>>>> 500114c74f9b4138c7d66560c77af3c406b4a286
         ggplot() +
         geom_mosaic(aes(x = product(b3_7, est), fill= b3_7))+
         labs(x="Estrato de tamaño",y="Tenencia de la tierra")+
