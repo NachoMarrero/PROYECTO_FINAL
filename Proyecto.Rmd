@@ -405,9 +405,10 @@ Cant_CJ<- datos %>%
           theme(aspect.ratio=1)
 ```
 
-Por otra parte, nos interesó averiguar si podiamos encontrar alguna diferencia sobre la renumeración por jornal que perciben los contratados para zafra, según su Condición Jurídica.
+  Por otra parte, nos interesó averiguar si podiamos encontrar alguna diferencia sobre la renumeración por jornal que perciben los contratados para zafra, según su Condición Jurídica.
+Observamos que no hay mucha diferencia entre sus cuartiles y mediana en las 3 primeras condiciones, pero si lo hay en la Condición Jurídica otra la cual tiene sueldo por jornal algunos muy bajos, datos atipicos.
 
-```{r,fig.cap="Observamos que no hay mucha diferencia entre sus cuartiles y mediana en las 3 primeras condiciones, pero si lo hay en la Condición Jurídica otra la cual tiene sueldo por jornal algunos muy bajos, datos atipicos."}
+```{r,fig.cap="Remuneracion por jornal pagado, segun la condicon juridica del propietario"}
 
 datos %>% 
   filter(pz_1==1,pz_2>0,pz_3>0) %>% 
@@ -418,16 +419,19 @@ datos %>%
   scale_x_discrete(name='')+
            labs(y="Renumeración/Jornal",fill='Condicion Juridica')+#theme(legend.position='bottom')+
            scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
-          theme(aspect.ratio=1)
+          theme(aspect.ratio=1)+
+        theme_bw()
 ```
-Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente con un boxplot.Vemos que el sueldo por jornal de las personas zafrales está en menos de 1000$, con varios outliers
+
+  Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente con un boxplot.Vemos que el sueldo por jornal de las personas zafrales está en menos de 1000$, con varios outliers
 ```{r, fig.cap="Gráfico de caja del sueldo por jornal trabajado."}
 
 datos %>% 
   filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% 
   summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% 
   ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))+labs(y='Sueldo por jornal')+
-         coord_flip()
+         coord_flip()+
+        theme_bw()
 ```
 
 Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.Observamos clara relacion lineal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración
@@ -444,6 +448,11 @@ gf<-datos %>%
 ggplotly(gf)
 ```
 
+##Conclusiones Finales.
+
+	Podemos concluir en base al analysis, que las personas  dueñas de los campos con mayores niveles de estudios son quienes mas innvovan, y en relacion a eso tambien son quines mas contratan personal profesional, esto nos demeustra que dichas personas puede que le dediquen, o inviertan mas tiempo y dinero en su produccion, relacionado al territorio observamos como ocurre lo esperado que a mayor tamaño de territorio mas cantidad de Unidades ganaderas a pesar de haber tambien casos en los cuales el campo esta super explotado y al contrario en el cual en grandes extensiones tienen muy pocos ovinos o bovinos lo cual podria deberse a un mal terreno para la ganaderia o que simplemente es campo desaptovechado. Tambien observamos que los propietarios del territorio Uruguayo mayormente son hombres entre los 40 y 60 años.
+	
+	
 ```{r,eval=FALSE}
 datos %>% 
   select(dpto)
@@ -491,4 +500,5 @@ geom_polygon()
 
 
 ```
+
 
