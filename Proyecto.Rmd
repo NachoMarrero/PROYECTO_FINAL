@@ -55,7 +55,10 @@ datos_1 <- data.frame(Variable = c("a11",
                                    "est",
                                    "prof_1",
                                    "ba_1",
-                                   "pa_1"),
+                                   "pa_1",
+                                   "pz_1",
+                                   "pz_2",
+                                   "pz_3"),
                       Descripcion = c("Edad",
                                       "Condición jurídica",
                                       "Nivel educativo",
@@ -66,7 +69,10 @@ datos_1 <- data.frame(Variable = c("a11",
                                       "Estrato de tamaño en unidades ganaderas",
                                       "Personal profesional",
                                       "Bosques artificiales",
-                                      "Praderas artificiales"))
+                                      "Praderas artificiales",
+                                      "Contrato personal zafral",
+                                      "Total de Jornales realizados",
+                                      "Total de renumeraciones(en pesos uruguayos)"))
 
 
 datos_1 %>% 
