@@ -3,9 +3,9 @@ title: "Proyecto"
 author: 'Angel Nuñez, Ignacio Marrero y Victoria Fernandez'
 date: '2022-07-04'
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 always_allow_html: yes
 ---
 
@@ -76,9 +76,9 @@ datos_1 %>%
 
 ## Análisis 1
 
-Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condición jurídica de los propietarios encuestados. Observamos como en su mayoría son personas físicas, lo que habilita la posibilidad de explorar la relación entre las características de las personas que dirigen la explotación y su aptitud innovadora, ya que las características demográficas solo estaban disponibles para este tipo de condición juíridica.
+Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condición jurídica de los propietarios encuestados. Observamos como en su mayoría son personas físicas, lo que habilita la posibilidad de explorar la relación entre las características de las personas que dirigen la explotación y su aptitud innovadora, ya que las características demográficas solo estaban disponibles para este tipo de condición jurídica.
  
-```{r, fig.cap= "Gráfico de barras sobre la condicion Juridica de los encuestados"}
+```{r, fig.cap= "Gráfico de barras sobre la condicion Jurídica de los encuestados"}
 
 datos %>% 
   group_by(a9) %>% 
@@ -356,17 +356,22 @@ Primero veremos si existen establecimientos con muy poca extension y grandes can
 
 ```{r}
 datos %>% 
-  group_by(b5,b3_7,est) %>% 
-  filter(b5!=0) %>% 
-  summarise(a=b5*b3_7/100)%>%
-  mutate(a = case_when(a %in% c(0:200)  ~ "0-200",
-                          a %in% c(201:400)  ~ "200-400",
-                          a %in% c(401:600)  ~ "400-600",
-                          a > 600 ~ "600")) %>%
-  ggplot() +
-  geom_mosaic(aes(x = product(a, est), fill= a))+
-  scale_fill_brewer(palette = "Set2")+
-  theme_bw()
+        group_by(b5,b3_7,est) %>% 
+        filter(b5!=0) %>% 
+        summarise(a=b5*b3_7/100)%>%
+        mutate(a = case_when(a %in% c(0:200)  ~ "0-200",
+                             a %in% c(201:400)  ~ "200-400",
+                             a %in% c(401:600)  ~ "400-600",
+                             a > 600 ~ "600")) %>%
+        #filter(a=="0-200",a=="200-400",a=="400-600",a=="600") %>% 
+        ggplot() +
+        geom_mosaic(aes(x = product(a, est), fill= a))+
+        scale_fill_brewer(name='Cantidad de hectareas',
+                          palette = "Set2")+
+        labs(x='Estrato')+
+        theme(aspect.ratio=1)+
+        theme(plot.background = element_rect(fill = "#F0F8FF"), 
+              panel.background = element_rect(fill = "#F0F8FF", colour="black"))
 ```
 
 Para utilizar la superficie se corrigió por la calidad del suelo, llevandola a hectáreas conneat 100 equivalentes de forma tal que sean calidades similares en términos de productividad.
@@ -425,7 +430,7 @@ Cant_CJ<- datos %>%
           theme(aspect.ratio=1)
 ```
 
-Por otra parte, nos interesó averiguar si podiamos encontrar alguna diferencia sobre la renumeración por jornal que perciben los contratados para zafra, agrupando por la Condición Jurídica.
+Por otra parte, nos interesó averiguar si podiamos encontrar alguna diferencia sobre la renumeración por jornal que perciben los contratados para zafra, según su Condición Jurídica.
 
 ```{r,fig.cap="Observamos que no hay mucha diferencia entre sus cuartiles y mediana en las 3 primeras condiciones, pero si lo hay en la Condición Jurídica otra la cual tiene sueldo por jornal algunos muy bajos, datos atipicos."}
 
@@ -440,7 +445,7 @@ datos %>%
            scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
           theme(aspect.ratio=1)
 ```
-Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente el sueldo por jornal con un boxplot.Vemos que el sueldo por jornal de las personas zafrales se comprende entre menos de 1000$, y varios outliers
+Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente con un boxplot.Vemos que el sueldo por jornal de las personas zafrales está en menos de 1000$, con varios outliers
 ```{r, fig.cap="Sueldo por jornal trabajado."}
 
 datos %>% 
@@ -451,7 +456,7 @@ datos %>%
 ```
 
 Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.Observamos clara relacion lineal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración
-```{r,fig.cap=""}
+```{r,fig.cap="Gráfico de puntos sobre la cantidad de jornales y su respectiva renumeración"}
 
 gf<-datos %>%
   filter(pz_1==1,b3_7>100,pz_2>0,pz_3>0) %>% 
@@ -459,9 +464,8 @@ gf<-datos %>%
   geom_point()+
   geom_smooth(formula= y ~ x,method ='lm',color='red',fill='blue')+
   scale_y_log10()+
-  scale_x_log10()+
+  scale_x_log10(breaks=c())+
   labs(x='Renumeracion',y='Jornales')
-
 ggplotly(gf)
 ```
 
