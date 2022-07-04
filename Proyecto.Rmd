@@ -28,19 +28,19 @@ datos <- read_xlsx(here("Datos","Datos_base_ganadera.xlsx"))
 ```
 
 ## Introducción
-Este proyecto nace como un instrumento para poder aplicar los contenidos aprendidos durante el semestre en un problema real. Se tendrá que demostrar los conocimentos adquiridos al realizar un análisis exploratorio sobre datos de interés nacional, poniendo especial énfasis en la correcta visualización de los resultados obtenidos, realizando una correcta interpretación de la misma. 
+  Este proyecto nace como un instrumento para poder aplicar los contenidos aprendidos durante el semestre en un problema real. Se tendrá que demostrar los conocimentos adquiridos al realizar un análisis exploratorio sobre datos de interés nacional, poniendo especial énfasis en la correcta visualización de los resultados obtenidos, realizando una correcta interpretación de la misma. 
 Se utilizará exclusivamente el lenguaje de programación R, y sus respectivas expansiones, como RMarkdown, Shiny y RStudio.
 
-En el caso de este grupo , se analizarán datos de una encuesta agropecuaria, que fueron elegidos para llevar a cabo el objetivo general de lograr una actualización del consumo intermedio del rubro ganadero en el marco de la actualización de las cuentas nacionales realizado por el BCU. Dicha encuesta contó con los siguientes objetivos específicos: relevar información sobre los tipos e intensidad de utilización de insumos,la disposición innovadora de los agentes, el trabajo empleado y los gastos incurridos en la actividad productiva. En este marco este trabajo se centrará en analizar lo relativo a la dispocisión innovadora de los agentes buscando la relación con las características demograficas de las personas que se encuentran a cargo de las explotaciones.
+  En el caso de este grupo , se analizarán datos de una encuesta agropecuaria, que fueron elegidos para llevar a cabo el objetivo general de lograr una actualización del consumo intermedio del rubro ganadero en el marco de la actualización de las cuentas nacionales realizado por el BCU. Dicha encuesta contó con los siguientes objetivos específicos: relevar información sobre los tipos e intensidad de utilización de insumos,la disposición innovadora de los agentes, el trabajo empleado y los gastos incurridos en la actividad productiva. En este marco este trabajo se centrará en analizar lo relativo a la dispocisión innovadora de los agentes buscando la relación con las características demograficas de las personas que se encuentran a cargo de las explotaciones.
 
-Ésta encuesta fue realizada por el Ministerio de Ganadería, Agricultura y Pesca del Uruguay, y las organizaciones que participaron fueron el Banco Central del Uruguay (BCU), Instituto Nacional de
+  Ésta encuesta fue realizada por el Ministerio de Ganadería, Agricultura y Pesca del Uruguay, y las organizaciones que participaron fueron el Banco Central del Uruguay (BCU), Instituto Nacional de
 Investigación Agropecuaria (INIA), Agencia de Evaluación de la OPP (AGEV), Agencia Nacional
 de Investigación e Innovación (ANII), Secretariado Uruguayo de la Lana (SUL), y la Unidad de
 Gestión de Proyectos (UGP) del MGAP.
 
-Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011 que tenía 25.566 explotaciones ganaderas, todas las variables son de tipo **double** ya que eran preguntas multiple opción (en su mayoría) con una recodificación numérica. Luego se realizó un muestreo por estrato de tamaño y por un criterio geográfico. El tamaño de la muestra resultó ser de 1.506 casos (explotacion con actividad principal a la ganaderia vacuna o ovina) algunos fueron descartados (porque ya no eran ganaderos o por otros aspectos) por lo que la muestra final es de 1.426 .
-
-En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a través de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
+  Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011 que tenía 25.566 explotaciones ganaderas, todas las variables son de tipo **double** ya que eran preguntas multiple opción (en su mayoría) con una recodificación numérica. Luego se realizó un muestreo por estrato de tamaño y por un criterio geográfico. El tamaño de la muestra resultó ser de 1.506 casos (explotacion con actividad principal a la ganaderia vacuna o ovina) algunos fueron descartados (porque ya no eran ganaderos o por otros aspectos) por lo que la muestra final es de 1.426 .
+  
+  En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a través de ponderadores por lo que los resultados a los que arribemos solo serán validos para estos casos y no serán conclusiones que se puedan extender al conjunto de los productores ganaderos.
 
 ```{r, results='asis'}
 options(xtable.comment = FALSE)
@@ -76,7 +76,7 @@ datos_1 %>%
 ```
 
 ## Análisis 1
-Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condición jurídica de los propietarios encuestados. Observamos como en su mayoría son personas físicas, lo que habilita la posibilidad de explorar la relación entre las características de las personas que dirigen la explotación y su aptitud innovadora, ya que las características demográficas solo estaban disponibles para este tipo de condición jurídica.
+  Para realizar la exploración, nos planteamos algunas preguntas para orientar el análisis. En primer lugar, decidimos investigar la condición jurídica de los propietarios encuestados. Observamos como en su mayoría son personas físicas, lo que habilita la posibilidad de explorar la relación entre las características de las personas que dirigen la explotación y su aptitud innovadora, ya que las características demográficas solo estaban disponibles para este tipo de condición jurídica.
  
 ```{r, fig.cap= "Gráfico de barras sobre la condicion Jurídica de los encuestados"}
 
@@ -94,7 +94,7 @@ datos %>%
   theme(legend.position='none') 
 ```
 
-Siguiendo con el análisis de las personas encuestadas, averiguamos la distribución de edades y el sexo de las personas físicas. También analizamos el nivel de educación de los encuestados (reagrupando la variable en 3 niveles "Básico" que equivale a los niveles de estudio ninguno y primario, "Secundaria" que equivale a secundaria básica y superior, y por último, nivel "Técnico o univarsitario" que son los niveles universitario y técnico) y nos encontramos con una población uniformemente distribuida en los 3 grupos,  lo que nos lleva a pensar que no hay una relación entre la tenencia de un establecimiento ganadero y el nivel de educación.
+  Siguiendo con el análisis de las personas encuestadas, averiguamos la distribución de edades y el sexo de las personas físicas. También analizamos el nivel de educación de los encuestados (reagrupando la variable en 3 niveles "Básico" que equivale a los niveles de estudio ninguno y primario, "Secundaria" que equivale a secundaria básica y superior, y por último, nivel "Técnico o univarsitario" que son los niveles universitario y técnico) y nos encontramos con una población uniformemente distribuida en los 3 grupos,  lo que nos lleva a pensar que no hay una relación entre la tenencia de un establecimiento ganadero y el nivel de educación.
 
 
 ```{r fig.cap="Gráfico de barras correspondiente a la relación entre edades y sexo de las personas físicas encuestadas."}
@@ -114,7 +114,7 @@ datos %>%
 ```
 
 
-Continuando con la variable de educación, y manteniendo la reagrupación anterior, investigamos como es la relación entre ésta y las actividades de innovación realizadas en el período (siendo 8 el máximo número posible de distintas innovaciones), en el cual observamos que las personas con mayor nivel educativo son mas propensas a realizar innovaciones tanto en vacunos como en ovinos. 
+  Continuando con la variable de educación, y manteniendo la reagrupación anterior, investigamos como es la relación entre ésta y las actividades de innovación realizadas en el período (siendo 8 el máximo número posible de distintas innovaciones), en el cual observamos que las personas con mayor nivel educativo son mas propensas a realizar innovaciones tanto en vacunos como en ovinos. 
 
 ```{r}
 aiv_nueva <- datos %>% 
@@ -190,7 +190,7 @@ datos %>%
 
 ```
 
-También analizamos la relación entre la contratación de asistencia técnica especializada y las innovaciones, podemos visualizar como la cantidad de personal profesional contratado es mayor en quienes mas innovaciones realizaron, podriamos deducir que quienes mas innovan tambien poseen mayores niveles de asistencia profesional para dicha actividad.
+  También analizamos la relación entre la contratación de asistencia técnica especializada y las innovaciones, podemos visualizar como la cantidad de personal profesional contratado es mayor en quienes mas innovaciones realizaron, podriamos deducir que quienes mas innovan tambien poseen mayores niveles de asistencia profesional para dicha actividad, tanto en vacunos como en ovinos.
 
 ```{r fig.cap="Gráfico de barras del nivel de innovación por establecimiento con vacunos segun la contratación de asistencia técnica especializada"}
 datos %>% 
@@ -227,7 +227,7 @@ datos %>%
                                                        '1' = 'Si',
                                                        '2' = 'No'))+ theme_bw()
 ```
-Exploramos si algunas características del sistema productivo como la presencia de bosques artificiales (ya sean estos de abrigo o de rendimiento) o praderas artificiales tenían diferentes niveles de innovación, debido a que el tipo de negocio puede ser distinto para estos establecimientos. Se observaron mayores niveles de innovación en los establecimientos que presentaban bosques artificiales, tanto para vacunos como ovinos. En cambio, la presencia de praderas artificiales no muestra una clara correlación con la cantidad de innovaciones presentes en la empresa en vacunos, pero si en ovinos.
+  Exploramos si algunas características del sistema productivo como la presencia de bosques artificiales (ya sean estos de abrigo o de rendimiento) o praderas artificiales tenían diferentes niveles de innovación, debido a que el tipo de negocio puede ser distinto para estos establecimientos. Se observaron mayores niveles de innovación en los establecimientos que presentaban bosques artificiales, tanto para vacunos como ovinos. En cambio, la presencia de praderas artificiales no muestra una clara correlación con la cantidad de innovaciones presentes en la empresa en vacunos, pero si en ovinos.
 
 ```{r fig.cap="Gráfico mosaico del nivel de innovación por establecimiento con vacunos segun la presencia de bosques artificiales en la explotación"}
 datos %>% 
@@ -300,7 +300,7 @@ datos %>%
 
 ```
 
-Como era esperable, los establecimientos de los estratos superiores (en cuanto a la cantidad de unidades ganaderas) son los que presentan mayores niveles de innovación. Esto se podría relacionar con niveles de gerenciamiento superior debidos a la escala y mayor disponibilidad de capital para invertir.
+  Como era esperable, los establecimientos de los estratos superiores (en cuanto a la cantidad de unidades ganaderas) son los que presentan mayores niveles de innovación. Esto se podría relacionar con niveles de gerenciamiento superior debidos a la escala y mayor disponibilidad de capital para invertir.
 
 ```{r fig.cap="Gráfico de barras apiladas que refiere a la realización de innovaciones en establecimientos con vacunos según el estrato de tamaño en unidades ganaderas"}
 
@@ -311,10 +311,10 @@ datos %>%
                                aiv_nueva %in% c(3,4,5) ~ "3 a 5",
                                aiv_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
    mutate(est = case_when(est %in% c(0)  ~ "0 nin",
-                          est %in% c(1,2) ~ "<100 a 149 UG",
-                          est %in% c(3,4) ~ "150 599 UG",
+                          est %in% c(1,2) ~ "< 149 UG",
+                          est %in% c(3,4) ~ "150 a 599 UG",
                           est %in% c(5,6) ~ "600 a 1.999 UG",
-                          est %in% c(7,8) ~ "2.000 a 3.500+ UG")) %>% 
+                          est %in% c(7,8) ~ " > 2.000 UG")) %>% 
   filter(a9=="1") %>% 
   summarise(n=n() ) %>%
   mutate(freq=n/sum(n)) %>%
@@ -334,10 +334,10 @@ datos %>%
                                aio_nueva %in% c(3,4,5) ~ "3 a 5",
                                aio_nueva %in% c(6,7,8) ~ "6 a 8")) %>% 
    mutate(est = case_when(est %in% c(0)  ~ "0 nin",
-                          est %in% c(1,2) ~ "<100 a 149 UG",
-                          est %in% c(3,4) ~ "150 599 UG",
+                          est %in% c(1,2) ~ "< 149 UG",
+                          est %in% c(3,4) ~ "150 a 599 UG",
                           est %in% c(5,6) ~ "600 a 1.999 UG",
-                          est %in% c(7,8) ~ "2.000 a 3.500+ UG")) %>% 
+                          est %in% c(7,8) ~ " > 2.000 UG")) %>% 
   filter(a9=="1") %>% 
   summarise(n=n() ) %>%
   mutate(freq=n/sum(n)) %>%
@@ -350,10 +350,10 @@ datos %>%
 
 
 ## Análisis 2
-En esta parte del análisis veremos características de las explotaciones.
+  En esta parte del análisis veremos características de las explotaciones.
 Primero veremos si existen establecimientos con muy poca extension y grandes cantidades de unidades ganaderas, observamos que hay muy pocos productores con mas de cinco unidades ganaderas que tengan superficies de menos de 600 hectáreas, también notamos que hay una gran distrubución del estrato que poseen para todos los encuestados, hay similiar cantidad de grandes productores como de pequeños.
 
-```{r}
+```{r,  fig.cap="Unidades Ganaderas segun la extension del territorio"}
 datos %>% 
         group_by(b3_7,est) %>%
         mutate(b3_7 = case_when(b3_7 %in% c(0:200)  ~ "0-200",
@@ -368,27 +368,11 @@ datos %>%
 ```
 
 
+  En ésta parte vamos a comparar, con dos diagramas de barras, el porcentaje el cual según su condicion jurídica si contratan tanto sea personal profesional y/o personal zafral. Para lograr esto, calculamos la cantidad, agrupando por su condición jurídica, de que contratan personal zafral y lo dividimos sobre la cantidad de encuestados y multiplicamos por 100, para ver su porcentaje. Usamos el mismo método para el personal profesional contratado por los encuestados. 
 
-```{r fig.cap="Unidades Ganaderas segun la extension del territorio",eval=FALSE}
+  A continuación observaremos la proporción de encuestados que contratan personal profesional y/o personal zafral según el tipo de condición jurídica de la empresa.
 
-datos %>% 
-  group_by(a,est) %>% 
-  mutate(b3_7 = case_when(a %in% c(1:200)  ~ "0-200",
-                          a %in% c(201:400)  ~ "200-400",
-                          a %in% c(401:600)  ~ "400-600",
-                          a > 600 ~ "600")) %>%
-  ggplot() +
-  geom_mosaic(aes(x = product(a, est), fill= a))+
-  scale_fill_brewer(palette = "Set2")+
-  labs(x="Estrato de tamaño",y="Tenencia de la tierra",fill="Tenencia de la tierra")+
-  theme_bw()
-```
-En ésta parte vamos a comparar, con dos diagramas de barras, el porcentaje el cual según su condicion jurídica si contratan tanto sea personal profesional y/o personal zafral. Para lograr esto, calculamos la cantidad, agrupando por su condición jurídica, de que contratan personal zafral y lo dividimos sobre la cantidad de encuestados y multiplicamos por 100, para ver su porcentaje. Usamos el mismo método para el personal profesional contratado por los encuestados. 
-
-
-A continuación observaremos la proporción de encuestados que contratan personal profesional y/o personal zafral según el tipo de condición jurídica de la empresa.
-
-```{r,fig.cap="Diagrama de barras Se observa que mayor proporcion de los encuestados contratan personal profesional que zafral. A pesar de esto, no hay diferencias de proporción segun su Condición Jurídica."}
+```{r,fig.cap="Diagrama de barras Se observa que mayor proporcion de los encuestados contratan personal profesional que zafral."}
 
 Cant_CJ<- datos %>%
           group_by(a9) %>% summarise(Cant=n())
@@ -411,20 +395,22 @@ Cant_CJ<- datos %>%
           scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
           labs(y='Porcentaje Personal Profesional',fill='',x='')+
           scale_y_continuous(breaks = c(20,40,60,80))+
-          theme(aspect.ratio=1)
-          ggplot(tabla_porcentaje)+
+          theme(aspect.ratio=1)+
+        theme_bw()
+        ggplot(tabla_porcentaje)+
           geom_col(aes(x=a9,y=Porc_Z*100,fill=factor(a9)))+
           geom_text(aes(x=a9,y=Porc_Z*100,label=round(Porc_Z*100)),vjust=2)+
           theme(legend.position = 'none')+
           scale_y_continuous()+
           labs(y='Porcentaje Personal zafral',x='')+
           scale_y_continuous(breaks = c(20,40,60,80))+
-          theme(aspect.ratio=1)
+          theme(aspect.ratio=1)+
+        theme_bw()
 ```
 
-Por otra parte, nos interesó averiguar si podiamos encontrar alguna diferencia sobre la renumeración por jornal que perciben los contratados para zafra, según su Condición Jurídica.
+Por otra parte, nos interesó averiguar si podiamos encontrar alguna diferencia sobre la renumeración por jornal que perciben los contratados para zafra, según su Condición Jurídica. Observamos que no hay mucha diferencia entre sus cuartiles y mediana en las 3 primeras condiciones, cercanas a los 1000$ por jornal, pero si lo hay en la Condición Jurídica otra la cual tiene sueldo por jornal algunos muy bajos, datos atipicos. 
 
-```{r,fig.cap="Observamos que no hay mucha diferencia entre sus cuartiles y mediana en las 3 primeras condiciones, pero si lo hay en la Condición Jurídica otra la cual tiene sueldo por jornal algunos muy bajos, datos atipicos."}
+```{r,fig.cap="Remuneracion por Jornal segun condicion juridica del encuestado."}
 
 datos %>% 
   filter(pz_1==1,pz_2>0,pz_3>0) %>% 
@@ -435,19 +421,22 @@ datos %>%
   scale_x_discrete(name='')+
            labs(y="Renumeración/Jornal",fill='Condicion Juridica')+#theme(legend.position='bottom')+
            scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
-          theme(aspect.ratio=1)
+        theme_bw()
 ```
-Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente con un boxplot.Vemos que el sueldo por jornal de las personas zafrales está en menos de 1000$, con varios outliers
+  Centrandonos en el sueldo por jornal, intentamos observar donde se agrupan mayoritariamente con un boxplot. Vemos que el sueldo por jornal de las personas zafrales está en menos de 1000$, con varios outliers.
+  
 ```{r, fig.cap="Sueldo por jornal trabajado."}
 
 datos %>% 
   filter(pz_1==1,b3_7>100,pz_2!=0,pz_3!=0) %>% 
   summarise('Sueldo_por_jornal'=pz_3/pz_2) %>% 
-  ggplot()+geom_boxplot(aes(y=Sueldo_por_jornal))+labs(y='Sueldo por jornal')+
-         coord_flip()
+  ggplot()+geom_boxplot(fill = "#4271AE",aes(y=Sueldo_por_jornal))+labs(y='Sueldo por jornal')+
+         coord_flip()+
+        theme_bw()+theme(aspect.ratio=0.2)+ theme(axis.ticks = element_blank(), 
+                 axis.text.y = element_blank())
 ```
 
-Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.Observamos clara relacion lineal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración
+  Filtrando por quienes contratan persona zafral, queriamos ver si hay alguna relación entre los jornales y su respectiva renumeración.Observamos clara relacion lineal fuerte negativa entre los jornales y su respectiva renumeración. Cuanto más jornales realicen, mayor será su renumeración
 ```{r,fig.cap="Gráfico de puntos sobre la cantidad de jornales y su respectiva renumeración"}
 
 gf<-datos %>%
