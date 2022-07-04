@@ -175,7 +175,8 @@ server <- function(input, output){
         geom_smooth(formula= y ~ x,method ='lm',color='red',fill='blue')+
         scale_y_log10()+
         scale_x_log10()+
-        labs(x='Renumeracion',y='Jornales')
+        labs(x='Renumeracion',y='Jornales')+
+        theme(aspect.ratio=1)
       ggplotly(gf)
   })
   output$scat<- renderPlot({
