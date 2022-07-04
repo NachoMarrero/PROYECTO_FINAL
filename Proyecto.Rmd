@@ -370,9 +370,9 @@ datos %>%
 
   En ésta parte vamos a comparar, con dos diagramas de barras, el porcentaje el cual según su condicion jurídica si contratan tanto sea personal profesional y/o personal zafral. Para lograr esto, calculamos la cantidad, agrupando por su condición jurídica, de que contratan personal zafral y lo dividimos sobre la cantidad de encuestados y multiplicamos por 100, para ver su porcentaje. Usamos el mismo método para el personal profesional contratado por los encuestados. 
 
-  A continuación observaremos la proporción de encuestados que contratan personal profesional y/o personal zafral según el tipo de condición jurídica de la empresa.
+  A continuación observaremos la proporción de encuestados que contratan personal profesional y/o personal zafral según el tipo de condición jurídica de la empresa. Se observa que mayor proporcion de los encuestados contratan personal profesional que zafral.
 
-```{r,fig.cap="Diagrama de barras Se observa que mayor proporcion de los encuestados contratan personal profesional que zafral."}
+```{r,fig.cap="Diagrama de barras que compara la cantidad de personal profesional y zafral contratado."}
 
 Cant_CJ<- datos %>%
           group_by(a9) %>% summarise(Cant=n())
@@ -390,7 +390,7 @@ Cant_CJ<- datos %>%
         ggplot(tabla_porcentaje)+
           geom_col(aes(y=Porc_PP*100,x=a9,fill=factor(a9)))+
           geom_text(aes(x=a9,y=Porc_PP*100,label=round(Porc_PP*100)),vjust=2)+
-          theme(legend.position = 'right')+
+          theme(legend.position = 'none')+
           scale_y_continuous()+
           scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
           labs(y='Porcentaje Personal Profesional',fill='',x='')+
@@ -402,7 +402,8 @@ Cant_CJ<- datos %>%
           geom_text(aes(x=a9,y=Porc_Z*100,label=round(Porc_Z*100)),vjust=2)+
           theme(legend.position = 'none')+
           scale_y_continuous()+
-          labs(y='Porcentaje Personal zafral',x='')+
+          scale_fill_discrete(labels=c('Persona Fisica','Sociedad sin contrato','Sociedad con contrato','Otra'))+
+          labs(y='Porcentaje Personal zafral',fill='',x='')+
           scale_y_continuous(breaks = c(20,40,60,80))+
           theme(aspect.ratio=1)+
         theme_bw()
