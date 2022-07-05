@@ -50,18 +50,32 @@ ui <- fluidPage(
                  img(height = 105, width = 300, src = "2020-03-13-123013.043508Logo-MGAP---Horizontal-fondo-transparente.png"))),
   navbarPage("Grupo 2",
              tabPanel(icon("home"),
-                      fluidRow(column(tags$img(src="imag1.jpg",width="100%",height="100%"),width=2),
+                      fluidRow(column(tags$img(src="ebdec0229bc8a4e0120b17375907af76.jpg",width="100%",height="100%"),width=2),
                                column(
                                  br(),
                                  p(" ", 
-                                   strong("
-                          En este trabajo se propone una descripción de los resultados de
+                                   strong("En el caso de este grupo , se analizarán datos de una encuesta 
+                                   agropecuaria, que fueron elegidos para llevar a cabo el objetivo general 
+                                   de lograr una actualización del consumo intermedio del rubro ganadero en 
+                                   el marco de la actualización de las cuentas nacionales realizado por el BCU. 
+                                   Dicha encuesta contó con los siguientes objetivos específicos: relevar información sobre los tipos e
+                                   intensidad de utilización de insumos,la disposición innovadora de los agentes, el 
+                                   trabajo empleado y los gastos incurridos en la actividad productiva. En este marco
+                                   este trabajo se centrará en analizar lo relativo a la dispocisión innovadora de los
+                                   agentes buscando la relación con las características demograficas de las personas que 
+                                   se encuentran a cargo de las explotaciones.
+                                   Trata de un muestreo cuya base muestral fue el censo general 
+                                   agropecuario del 2011 que tenía 25.566 explotaciones ganaderas.
+                                   Luego se realizó un muestreo por estrato de tamaño y por un criterio geográfico. 
+                                   El tamaño de la muestra resultó ser de 1.506 casos (explotacion con actividad principal 
+                                   a la ganaderia vacuna o ovina) algunos fueron descartados (porque ya no eran ganaderos 
+                                   o por otros aspectos) por lo que la muestra final es de 1.426.")),
+                                 br(),
+                                 p("En este trabajo se propone una descripción de los resultados de
                                  la encuesta sin expandir a través de ponderadores por lo que los 
                                  resultados a los que arribemos solo serán validos para estos casos
                                  y no serán conclusiones que se puedan extender al conjunto de los
-                                 productores ganaderos.")),
-                                 br(),
-                                 p("Los integrantes son Victoria Fernandez, Angel Nuñez e Ignacio Marrero.",
+                                 productores ganaderos.",
                                    em(" ")),
                                  width=8))),
              tabPanel("Datos de los encuestados",
