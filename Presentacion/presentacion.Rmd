@@ -25,7 +25,7 @@ Se analizarán datos de una encuesta agropecuaria, que fueron elegidos para llev
 
 Ésta encuesta fue realizada por el Ministerio de Ganadería, Agricultura y Pesca del Uruguay, con participacion de otras orgaizaciones.
 
-Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011, las preguntas eran multiple opción (en su mayoría) con una recodificación numérica con un total de 821. El tamaño de la muestra resultó ser de  1.426 casos (explotacion con actividad principal a la ganaderia vacuna u ovina).En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a través de ponderadores
+Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011, las preguntas eran multiple opción (en su mayoría) con una recodificación numérica con un total de 821. El tamaño de la muestra resultó ser de  1.426 casos (explotacion con actividad principal a la ganaderia vacuna u ovina).En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a través de ponderadores.
 
 
 ## <span style="color:#88398A">Variables a utilizar</span>
@@ -35,4 +35,55 @@ Trata de un muestreo cuya base muestral fue el censo general agropecuario del 20
 ## <span style="color:#88398A">Edad y sexo</span>
 
 ![](edad.png){width=70%}
+
+## <span style="color:#88398A">Innovación</span>
+
+![](innovacioneduacion.png){width=49%}
+
+![](innovacioneduacion_ovejas.png){width=49%}
+
+## <span style="color:#88398A">Innovación</span>
+
+![](profesional.png){width=49%}
+
+![](profesional_ovejas.png){width=49%}
+
+## <span style="color:#88398A">Innovación</span>
+
+![](innovacionbosque.png){width=49%}
+
+![](innovacionbosqueoveja.png){width=49%}
+
+## <span style="color:#88398A">Innovación</span>
+
+![](Innovacionpradera.png){width=49%}
+
+![](innovacionpradera_oveja.png){width=49%}
+
+## <span style="color:#88398A">Innovación</span>
+
+![](innovacionestrato.png){width=49%}
+
+![](innovacionestrato_ovejas.png){width=49%}
+
+## <span style="color:#88398A">Estrato de tamaño</span>
+
+![](estratotamano.png){width=70%}
+
+## <span style="color:#88398A">Personal zafral y profesional</span>
+
+![](zafralseguncondicion.png){width=41%}
+![](profesionalseguncondicion.png){width=51%}
+
+## <span style="color:#88398A">Remuneración</span>
+
+![](cajasremuneracion.png){width=70%}
+
+## <span style="color:#88398A">Sueldo</span>
+
+![](cajasueldo.png){width=70%}
+
+## <span style="color:#88398A">Gráfico interactivo</span>
+
+![](ggplotly.png){width=70%}
 
