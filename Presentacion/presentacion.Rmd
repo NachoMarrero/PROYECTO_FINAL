@@ -1,0 +1,42 @@
+---
+title: "<span style="color:#88398A">Presentación proyecto final</span>"
+author: "<span style="color:#88398A"> <font size="6">Angel Nuñez  Ignacio Marrero  Victoria Fernandez, \@STA_NT</span></font>"
+date: "<span style="color:#88398A"> 6 de Julio, 2022"
+output:
+  ioslides_presentation: default
+  pdf_document: default
+widescreen: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## <span style="color:#88398A">Proyecto Final</span>
+
+- Curso: Nuevas tecnologías para el análisis estadístico de datos
+
+- Docente: Dra. Natalia da Silva
+
+- Ayudante: Mag. Federico Molina
+
+## <span style="color:#88398A">Datos</span>
+
+ Analisaremos datos de una encuesta agropecuaria, la cual tiene como objetivos analizar las caraceristicas de los encuestados, la disposición innovadora de los agentes, el trabajo empleado y los gastos incurridos en la actividad productiva. 
+
+Ésta encuesta fue realizada por el Ministerio de Ganadería, Agricultura y Pesca del Uruguay, con participacion de otras orgaizaciones.
+
+Trata de un muestreo cuya base muestral fue el censo general agropecuario del 2011, las preguntas eran multiple opción (en su mayoría) con una recodificación numérica con un total de 821. El tamaño de la muestra resultó ser de  1.426 casos (explotacion con actividad principal a la ganaderia vacuna o ovina).En este trabajo se propone una descripción de los resultados de la encuesta sin expandir a través de ponderadores
+
+
+## <span style="color:#88398A">Variables a utilizar</span>
+
+![img](tabla.png){width=70%}
+## <span style="color:#88398A">Edad y sexo de los propietarios</span>
+![img](edad.png){width=70%}
+## <span style="color:#88398A">Innovaciones segun nivel educativo</span>
+
+![img](innovacioneduacion.png){width=70%}
+## <span style="color:#88398A">Probabilidad de contratar profesional segun cantidad de innovaciones</span>
+
+![img](profesional.png){width=70%}
