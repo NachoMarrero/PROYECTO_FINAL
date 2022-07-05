@@ -87,3 +87,9 @@ Trata de un muestreo cuya base muestral fue el censo general agropecuario del 20
 
 ![](ggplotly.png){width=70%}
 
+
+## <span style="color:#88398A">App</span>
+
+[Shiny app](https://vilicky.shinyapps.io/app_proyecto/) 
+
+
