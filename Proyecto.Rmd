@@ -471,7 +471,16 @@ Centrándonos en éste último, podemos concluir que sin importar el propietario
 
 En relación con las cuestiones demográficas, observamos que los propietarios del territorio uruguayo mayormente son hombres entre los 40 y 60 años.
 
-	
+\textcolor{violet}{Hicieron un buen trabajo y me gustó su presentación. Comentarios del documento: No cumple todos los requísitos, les faltó usar referencias cruzadas, lo cual dificulta enganchar lectura y gráficas. EL texto y figuras están desordenados y no agregan bibliografía. Deben diferenciar en el título de los gráficos cuando tienen un gráfico de barras apiladas y uno apilado al $100\%$.
+La escritura del texto es buena  aunque no cumpla tener secciones para cada parte.
+Alguna mejora en los gráficos (en vez de leyendas ponerlo en los ejes)
+Mencionan que crean un índice de innovación en la presentación como una suma de variables (me pareció muy bien), les faltó mencionarlo en el documento.
+Son precisos al analizar relaciones lineales y no inferir relaciones causales.
+No incluyen una sección con la descripción de la aplicación shiny.
+La aplicación está bien armada, incluye descripción, distintas ventas con análisis interactivos. Gran mejora y avance respecto a la anterior.}
+\textcolor{violet}{PUNTOS: 20/25}
+
+
 ```{r,eval=FALSE}
 datos %>% 
   select(dpto)
